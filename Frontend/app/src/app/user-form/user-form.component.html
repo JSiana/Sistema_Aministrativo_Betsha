@@ -1,0 +1,62 @@
+<div class="fondo-login d-flex flex-column justify-content-center align-items-center min-vh-100 w-100">
+  <!-- Redes sociales -->
+  <div class="mb-4 text-center">
+    <h5 class="text-white">¿Tienes dudas?</h5>
+    <div class="d-flex gap-2 justify-content-center flex-wrap px-3">
+      <a href="https://www.facebook.com/" target="_blank" class="btn btn-primary btn-sm">
+        <i class="bi bi-facebook"></i> Facebook
+      </a>
+      <a href="https://www.whatsapp.com/" target="_blank" class="btn btn-success btn-sm">
+        <i class="bi bi-whatsapp"></i> WhatsApp
+      </a>
+      <a href="https://www.twitter.com/" target="_blank" class="btn btn-info btn-sm text-white">
+        <i class="bi bi-twitter"></i> Twitter
+      </a>
+      <a href="tel:+18006818824" class="btn btn-secondary btn-sm">
+        <i class="bi bi-telephone"></i> Llamar
+      </a>
+    </div>
+  </div>
+
+  <!-- Login form -->
+  <div class="card shadow-sm p-4 mt-3" style="max-width: 400px; width: 100%;">
+    <h2 class="mb-4 text-center">Iniciar sesión</h2>
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate>
+      <div class="mb-3">
+        <label for="usuario" class="form-label">Usuario</label>
+        <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuario" required
+          [(ngModel)]="user.usuario" #usuario="ngModel" [class.is-invalid]="usuario.invalid && usuario.touched" />
+        <div *ngIf="usuario.invalid && usuario.touched" class="invalid-feedback">
+          Por favor ingresa un usuario válido.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <div class="input-group">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" class="form-control"
+            placeholder="Contraseña" required [(ngModel)]="user.contrasenia" #password="ngModel"
+            [class.is-invalid]="password.invalid && password.touched" />
+          <span class="input-group-text bg-white border-start-0" (click)="togglePasswordVisibility()">
+            <i [ngClass]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </span>
+        </div>
+        <div *ngIf="password.invalid && password.touched" class="invalid-feedback d-block">
+          Ingrese la contraseña
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        Ingresar
+      </button>
+
+      <div class="mt-3 text-center">
+        <a href="#" class="text-decoration-none text-primary">¿Olvidaste tu contraseña?</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto pt-3 text-center text-white" style="font-size: 0.9rem;">
+    &copy; 2025 Betshalom. Todos los derechos reservados.
+  </footer>
+</div>

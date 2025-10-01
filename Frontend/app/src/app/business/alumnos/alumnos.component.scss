@@ -1,0 +1,40 @@
+
+.custom-scroll {
+    max-height: 700px; /* ajusta según necesites */
+    overflow-y: auto;
+  }
+
+  .sticky-header th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .custom-table {
+  border-radius: 10px;
+  overflow: hidden; /* necesario para que el borde redondeado se aplique bien */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* sombra suave */
+}
+
+.custom-table th,
+.custom-table td {
+  border: none; /* opcional: elimina el borde recto */
+}
+
+.custom-table thead {
+  background-color: #343a40;
+  color: white;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1040;
+}
+.modal {
+  z-index: 1050;
+}

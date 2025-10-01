@@ -1,0 +1,176 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="display-4 m-0">Registro de Alumnos</h1>
+
+  <button class="btn btn-primary h-25 mb-0" (click)="abrirModalNuevo()"><i class="bi bi-plus"
+      title="Crear Alumno"></i>Nuevo Alumno</button>
+
+</div>
+
+<div class="table-responsible custom-scroll">
+  <table class="table table-striped table-hover custom-table">
+
+    <thead class="table-danger sticky-header">
+      <tr>
+        <th>ID</th>
+        <th>Codigo Personal</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+
+        <th>Encargado</th>
+        <th>Estado</th>
+        <th></th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let alumno of alumnos">
+        <td>{{ alumno.id }}</td>
+        <td>{{ alumno.codigoPersonal }}</td>
+        <td>
+          {{ alumno.primerNombre }}
+          {{ alumno.segundoNombre || '' }}
+          {{ alumno.tercerNombre || '' }}
+        </td>
+        <td>
+          {{ alumno.primerApellido }}
+          {{ alumno.segundoApellido || '' }}
+        </td>
+        <td>
+          {{ alumno.nombreEncargado || '' }} {{ alumno.apellidoEncargado || '' }}
+        </td>
+        <td>
+          <span [ngClass]="alumno.estado ? 'text-success' : 'text-danger'">
+            {{ alumno.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td>
+          <!-- Botón de ver información -->
+          <button class="btn btn-sm btn-info me-1" (click)="abrirModalVer(alumno)">Ver</button>
+
+          <!-- Botón de eliminar -->
+          <button class="btn btn-sm btn-danger" (click)="eliminarAlumno(alumno)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+
+
+
+
+  </table>
+</div>
+
+<!-- Backdrop -->
+<div class="modal-backdrop show" *ngIf="mostrarModal" (click)="cerrarModal()"></div>
+
+
+<div class="modal d-block" *ngIf="mostrarModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalle del Alumno</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="alumnoSeleccionado">
+        <div class="row g-3">
+          <!-- Código Personal -->
+          <div class="col-md-6">
+            <label class="form-label">Código Personal</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.codigoPersonal"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Primer Nombre -->
+          <div class="col-md-6">
+            <label class="form-label">Primer Nombre</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.primerNombre"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Segundo Nombre -->
+          <div class="col-md-6">
+            <label class="form-label">Segundo Nombre</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.segundoNombre"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Tercer Nombre -->
+          <div class="col-md-6">
+            <label class="form-label">Tercer Nombre</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.tercerNombre"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Primer Apellido -->
+          <div class="col-md-6">
+            <label class="form-label">Primer Apellido</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.primerApellido"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Segundo Apellido -->
+          <div class="col-md-6">
+            <label class="form-label">Segundo Apellido</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.segundoApellido"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Email -->
+          <div class="col-md-6">
+            <label class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" [(ngModel)]="alumnoSeleccionado.email" [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Fecha Nacimiento -->
+          <div class="col-md-6">
+            <label class="form-label">Fecha de Nacimiento</label>
+            <input type="date" class="form-control" [(ngModel)]="alumnoSeleccionado.fechaNacimiento"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Último Grado -->
+          <div class="col-md-6">
+            <label class="form-label">Último Grado</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.ultimoGrado"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-md-6">
+            <label class="form-label">Teléfono</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.telefono" [readonly]="!modoEdicion">
+          </div>
+
+          <!-- ID Encargado -->
+          <div class="col-md-6">
+            <label class="form-label">Encargado</label>
+            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.nombreCompletoEncargado"
+              [readonly]="!modoEdicion">
+          </div>
+
+          <!-- Estado 
+          <div class="col-md-6">
+            <label class="form-label">Estado</label>
+            <input type="text" class="form-control" [value]="alumnoSeleccionado.estado ? 'Activo' : 'Inactivo'"
+              readonly>
+          </div>
+-->
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button *ngIf="!modoEdicion" class="btn btn-primary" (click)="activarEdicion()">
+          Editar
+        </button>
+        <button *ngIf="modoEdicion" class="btn btn-success" (click)="guardarCambios()">
+          Guardar
+        </button>
+        <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>

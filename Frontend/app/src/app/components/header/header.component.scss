@@ -1,0 +1,17 @@
+.custom-navbar {
+  background-color: #f8f9fa; /* fondo claro */
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3); /* sombra hacia abajo */
+  z-index: 1030; /* para estar por encima de otros elementos si es necesario */
+  padding-bottom: 12px;
+}
+
+.btn-rojo-hover {
+  background-color: #d3d3d3;
+  color: #000000; /* color texto inicial (rojo oscuro) */
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.btn-rojo-hover:hover {
+  background-color: #dc3545; /* rojo Bootstrap */
+  color: white;
+}

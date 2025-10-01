@@ -1,0 +1,18 @@
+<div class="d-flex flex-column">
+  <!-- Header -->
+  <app-header (toggleSidebar)="toggleSidebar()" class="header-fixed"></app-header>
+
+  <!-- Main content -->
+  <div class="content-wrapper">
+    <!-- Sidebar -->
+    <app-sidebar [ngClass]="{'collapsed': !showSidebar }" class="sidebar p-4"></app-sidebar>
+
+    <!-- Main area -->
+      <main [ngClass]="{ 'expanded': !showSidebar }" class="main-content p-4">
+        <router-outlet></router-outlet>
+      </main>
+  </div>
+
+  <!-- Footer -->
+  <app-footer class="footer-fixed"></app-footer>
+</div>

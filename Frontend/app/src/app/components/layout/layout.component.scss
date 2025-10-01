@@ -1,0 +1,61 @@
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1030;
+  height: 70px;
+}
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 1030;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-grow: 1;
+  margin-top: 70px; /* altura del header */
+  margin-bottom: 80px; /* altura del footer */
+  overflow: hidden;
+  height: calc(100vh - 70px - 80px);
+}
+
+.sidebar {
+  width: 250px;
+  transition: transform 0.9s ease, opacity 0.9s ease;
+  transform: translateX(0)  ;
+  opacity: 1;
+  justify-content: center;
+}
+
+.main-content{
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  flex-grow: 1;
+  display: block;
+  height: 100%;
+  transition: margin-left 0.9s ease;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none; // opcional, para evitar clics mientras está oculto
+  justify-content: center;
+}
+
+
+.main-content.expanded {
+  margin-left: -250px;
+
+}

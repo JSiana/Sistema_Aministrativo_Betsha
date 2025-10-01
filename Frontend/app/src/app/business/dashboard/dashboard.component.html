@@ -1,0 +1,66 @@
+<div class="container-fluid mt-4">
+        <!-- Primera fila: tarjetas -->
+        <div class="row mb-4">
+                <!-- Card 1: Usuarios -->
+                <div class="col-md-3">
+                        <div class="card text-white bg-primary shadow rounded-3">
+                                <div class="card-body">
+                                        <h5 class="card-title">Usuarios</h5>
+                                        <p class="card-text fs-4">120</p>
+                                </div>
+                        </div>
+                </div>
+                <!-- Card 2: Alumnos -->
+                <div class="col-md-3">
+                        <div class="card text-white bg-success shadow rounded-3">
+                                <div class="card-body">
+                                        <h5 class="card-title">Alumnos</h5>
+                                        <p class="card-text fs-4">540</p>
+                                </div>
+                        </div>
+                </div>
+                <!-- Card 3: Aprobados -->
+                <div class="col-md-3">
+                        <div class="card text-white bg-success shadow rounded-3">
+                                <div class="card-body">
+                                        <h5 class="card-title">Aprobados</h5>
+                                        <p class="card-text fs-4">472</p>
+                                </div>
+                        </div>
+                </div>
+                <!-- Card 4: Reprobados -->
+                <div class="col-md-3">
+                        <div class="card text-white bg-danger shadow rounded-3">
+                                <div class="card-body">
+                                        <h5 class="card-title">Reprobados</h5>
+                                        <p class="card-text fs-4">68</p>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
+        <!-- Segunda fila: gráfico y calendario -->
+        <div class="row">
+                <!-- Gráfico -->
+                <div class="col-md-8">
+                        <h2>Pagos</h2>
+                        <div class="card shadow mb-4">
+                                <div class="card-body p-2">
+                                        <canvas baseChart [data]="pagosData" [options]="pagosOptions" type="bar">
+                                        </canvas>
+                                </div>
+                        </div>
+                </div>
+
+                <div class="col-md-4">
+                        <h2>Calendario</h2>
+                        <div class="card shadow mb-4">
+                                <div class="card-body p-2">
+                                        <div class="calendar">
+                                                <full-calendar [options]="calendarOptions"></full-calendar>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div> <!-- cierre correcto de container-fluid -->

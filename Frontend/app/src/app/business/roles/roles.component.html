@@ -1,0 +1,98 @@
+<div class="content">
+  <div class="title d-flex justify-content-between aling=items-center fs-1 fw-bold">
+    <p class="mb-0">Listado de roles</p>
+    <button class="btn btn-primary h-25 mb-0" (click)="abrirFormulario()">
+      <i class="bi bi-plus" title="Crear Rol"></i>
+      Nuevo rol</button>
+  </div>
+</div>
+
+<div class="table-responsible custom-scroll">
+  <table class="table table-striped table-hover">
+    <thead class="table-primary sticky-header">
+      <tr>
+        <th>ID</th>
+        <th>Nombre del Rol</th>
+        <th>Descripción</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rol of roles">
+        <td>{{ rol.id }}</td>
+        <td>{{ rol.nombreRol }}</td>
+        <td>{{ rol.descripcion }}</td>
+        <td>
+          <span class="badge" [ngClass]="rol.estado ? 'bg-success' : 'bg-danger'">
+            {{ rol.estado ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+        <td class="text-end pe-4">
+          <button class="btn btn-warning btn-sm me-1" (click)="abrirFormularioEdicion(rol)">
+            Modificar
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="desactivarRol(rol.id!)">
+            Eliminar
+          </button>
+
+        </td>
+      </tr>
+    </tbody>
+
+    <p *ngIf="mensajeError" class="text-danger">{{ mensajeError }}</p>
+
+  </table>
+</div>
+
+
+<!-- Modal simple con ngIf -->
+<div class="modal fade show" tabindex="-1" role="dialog" [ngStyle]="{ 
+  display: mostrarFormulario ? 'block' : 'none' }"
+  *ngIf="mostrarFormulario">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear Nuevo Rol</h5>
+        <button type="button" class="btn-close" (click)="cerrarFormulario()"></button>
+      </div>
+      <div class="modal-body">
+
+        <form *ngIf="rolSeleccionado" (ngSubmit)="guardarRol()" #rolForm="ngForm">
+          <div class="mb-3">
+            <label for="nombreRol" class="form-label">Nombre del Rol</label>
+            <input type="text" id="nombreRol" name="nombreRol" class="form-control" required
+              [(ngModel)]="rolSeleccionado.nombreRol" #nombreRol="ngModel" />
+            <div *ngIf="nombreRol.invalid && nombreRol.touched" class="text-danger">
+              El nombre del rol es obligatorio.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" required
+              [(ngModel)]="rolSeleccionado.descripcion" #descripcion="ngModel"></textarea>
+            <div *ngIf="descripcion.invalid && descripcion.touched" class="text-danger">
+              La descripción es obligatoria.
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+          <button type="submit" class="btn btn-primary" [disabled]="rolForm.invalid">
+            {{ rolSeleccionado.id ? 'Guardar Cambios' : 'Crear Rol' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="cerrarFormulario()">
+            Cancelar
+          </button>
+          </div>
+        </form>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal backdrop -->
+<div class="modal-backdrop fade show" *ngIf="mostrarFormulario" (click)="cerrarFormulario()"></div>

@@ -1,0 +1,104 @@
+<div class="form-usuario">
+    <h1>Registro de usuarios</h1>
+
+
+    <div class="container-fluid p-0 m-0 text-dark">
+        <div class="info-alumno">
+            <!-- Parte superior -->
+            <div class="col-12 border p-3 mb-3">
+                <h3>Formulario de informacion general</h3>
+                <form>
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <label for="codigo" class="form-label">Código Personal</label>
+                            <input type="text" class="form-control" id="codigo">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="dni" class="form-label">Primer Nombre</label>
+                            <input type="text" class="form-control" id="primerNombre">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="nombres" class="form-label">Segundo Nombre</label>
+                            <input type="text" class="form-control" id="segundoNombre">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="nombres" class="form-label">Tercer Nombre</label>
+                            <input type="text" class="form-control" id="segundoNombre">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="apellidos" class="form-label">Primer Apellido</label>
+                            <input type="text" class="form-control" id="primerApellido">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="apellidos" class="form-label">Segundo Apellido</label>
+                            <input type="text" class="form-control" id="segundoApellido">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" id="fechaNacimiento">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label for="genero" class="form-label">Genero</label>
+                            <select class="form-select" id="genero">
+                                <option selected disabled>Seleccione</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label for="correo" class="form-label">Correo</label>
+                            <input type="email" class="form-control" id="correo">
+                        </div>
+
+                        <div class="col-md-1 mb-3">
+                            <label for="Telefono" class="form-label">Telefono</label>
+                            <input type="tel" class="form-control" id="telefono">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="gradoCursado" class="form-label">Ultimo grado cursado</label>
+                            <input type="text" class="form-control" id="gradoCursado">
+                        </div>
+
+                        <div class="col-md-1 mb-3">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" class="form-control" id="edad">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input type="text" class="form-control" id="direccion">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input type="text" class="form-control" id="direccion">
+                        </div>
+                        
+
+                        <div class="col-md-2 mb-3">
+                            <label for="estado" class="form-label">Estado</label>
+                            <select class="form-select" id="estado">
+                                <option selected disabled>Seleccione</option>
+                                <option value="A">Activo</option>
+                                <option value="I">Inactivo</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+
+    <div class="buttoms">
+        <button routerLink="/alumnos" class="btn btn-secondary m-3">Atras</button>
+        <button class="btn btn-danger">Limpiar</button>
+        <button class="btn btn-primary m-3">Guardar</button>
+    </div>
+
+    
+</div>
