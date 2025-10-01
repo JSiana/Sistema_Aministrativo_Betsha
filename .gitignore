@@ -1,0 +1,16 @@
+# Backend Java
+Backend/demo/target/
+Backend/demo/*.class
+Backend/demo/*.jar
+Backend/demo/*.war
+
+# Frontend Angular
+Frontend/app/node_modules/
+Frontend/app/dist/
+Frontend/app/.angular/cache/
+
+# Archivos de configuración
+.env
+.idea/
+.vscode/
+.DS_Store

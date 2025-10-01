@@ -8,6 +8,7 @@ import com.example.demo.service.EncargadoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EncargadoServiceImpl implements EncargadoService {
@@ -20,10 +21,9 @@ public class EncargadoServiceImpl implements EncargadoService {
 
     @Override
     public List<EncargadoResponseDTO> listarEncargados() {
-        return encargadoRepository.findAll()
-                .stream()
-                .map(EncargadoMapper::toResponseDTO)
-                .toList();
+        return null;
+
+
     }
 
 }
