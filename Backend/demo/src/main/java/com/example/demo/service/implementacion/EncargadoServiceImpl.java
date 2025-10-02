@@ -1,6 +1,7 @@
 package com.example.demo.service.implementacion;
 
 import com.example.demo.dto.EncargadoResponseDTO;
+import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.mapper.EncargadoMapper;
 import com.example.demo.model.Encargados;
 import com.example.demo.repository.EncargadoRepository;
@@ -20,10 +21,13 @@ public class EncargadoServiceImpl implements EncargadoService {
     }
 
     @Override
-    public List<EncargadoResponseDTO> listarEncargados() {
-        return null;
+    public List<Encargados> listarEncargados() {
+         return encargadoRepository.findAll();
+    }
 
-
+    @Override
+    public Encargados crearEncargado(Encargados encargados){
+        return encargadoRepository.save(encargados);
     }
 
 }

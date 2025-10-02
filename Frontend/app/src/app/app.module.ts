@@ -32,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { EncargadoComponent } from './business/encargado/encargado.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { MatInputModule } from '@angular/material/input';
     CierreComponent,
     ConfiguracionComponent,
     AlumnoFormComponent,
-    UsersFormComponent
+    UsersFormComponent,
+    EncargadoComponent
   ],
   imports: [
     BrowserModule,

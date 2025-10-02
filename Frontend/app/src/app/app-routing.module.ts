@@ -13,6 +13,7 @@ import { CierreComponent } from './business/cierre/cierre.component';
 import { ConfiguracionComponent } from './business/configuracion/configuracion.component';
 import { AlumnoFormComponent } from './business/alumno-form/alumno-form.component';
 import { UsersFormComponent } from './business/users-form/users-form.component';
+import { EncargadoComponent } from './business/encargado/encargado.component';
 
 const routes: Routes = [
 
@@ -32,7 +33,8 @@ const routes: Routes = [
       {path: 'cierre', component:CierreComponent},
       {path:'configuracion', component:ConfiguracionComponent},
       {path: 'alumno-form', component:AlumnoFormComponent},
-      {path: 'users-form', component:UsersFormComponent}
+      {path: 'users-form', component:UsersFormComponent},
+      {path: 'encargado', component:EncargadoComponent}
     ]
   },
   {path:'**', redirectTo:'login', pathMatch:'full'},

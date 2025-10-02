@@ -7,32 +7,30 @@ import com.example.demo.model.Encargados;
 
 public class EncargadoMapper {
 
-    // Para convertir de DTO de creación a entidad
-//    public static Encargados toEntity(AlumnoDTO dto, EncargadoResponseDTO encargadoDTO) {
-//        Alumnos alumno = new Alumnos();
-//        alumno.setCodigoPersonal(dto.getCodigoPersonal());
-//        alumno.setPrimerNombre(dto.getPrimerNombre());
-//        alumno.setSegundoNombre(dto.getSegundoNombre());
-//        alumno.setTercerNombre(dto.getTercerNombre());
-//        alumno.setPrimerApellido(dto.getPrimerApellido());
-//        alumno.setSegundoApellido(dto.getSegundoApellido());
-//        alumno.setEmail(dto.getEmail());
-//        alumno.setFechaNacimiento(dto.getFechaNacimiento());
-//        alumno.setUltimoGrado(dto.getUltimoGrado());
-//        alumno.setTelefono(dto.getTelefono());
-//        alumno.setEstado(dto.getEstado());
-//        alumno.setEncargado(encargadoDTO);
-//        return alumno;
-//    }
-//
-//
-//    public static EncargadoResponseDTO toResponseDTO(Encargados encargado) {
-//        return new EncargadoResponseDTO(
-//                encargado.getId(),
-//                encargado.getNombres(),
-//                encargado.getApellidos()
-//        );
-//    }
+    public static Encargados toEntity(EncargadoResponseDTO dto){
+        Encargados encargado = new Encargados();
+        encargado.setDpi(dto.getDpi());
+        encargado.setNombres(dto.getNombres());
+        encargado.setApellidos(dto.getApellidos());
+        encargado.setTelefono(dto.getTelefono());
+        encargado.setDireccion(dto.getDireccion());
+        encargado.setEstado(dto.getEstado());
+
+        return encargado;
+    }
+
+    public static EncargadoResponseDTO toResponseDTO(Encargados encargados){
+        EncargadoResponseDTO dto = new EncargadoResponseDTO();
+
+        dto.setId(encargados.getId());
+        dto.setDpi(encargados.getDpi());
+        dto.setNombres(encargados.getNombres());
+        dto.setApellidos(encargados.getApellidos());
+        dto.setTelefono(encargados.getTelefono());
+        dto.setDireccion(encargados.getDireccion());
+        dto.setEstado(encargados.get);
+
+    }
 
 
 

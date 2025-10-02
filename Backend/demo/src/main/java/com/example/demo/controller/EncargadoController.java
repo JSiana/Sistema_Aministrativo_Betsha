@@ -23,8 +23,9 @@ public class EncargadoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EncargadoResponseDTO>> listarEncargados() {
-        return ResponseEntity.ok(encargadoService.listarEncargados());
+    public ResponseEntity<List<Encargados>> listarEncargados() {
+        List<Encargados> lista = encargadoService.listarEncargados();
+        return ResponseEntity.ok(lista);
     }
 
     @PostMapping

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RolesRepository extends JpaRepository<Roles, Long> {
-List<Roles> findByEstadoTrue();
+    List<Roles> findByEstadoTrue();
 }

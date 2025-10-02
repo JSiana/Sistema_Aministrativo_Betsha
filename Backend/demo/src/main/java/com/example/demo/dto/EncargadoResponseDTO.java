@@ -3,25 +3,57 @@ package com.example.demo.dto;
 public class EncargadoResponseDTO {
 
     private Long id;
+    private String dpi;
     private String nombres;
     private String apellidos;
+    private String telefono;
+    private String direccion;
+    private Boolean estado;
+
 
     public EncargadoResponseDTO() {
     }
 
-
-    public EncargadoResponseDTO(Long id, String nombres, String apellidos) {
+    public EncargadoResponseDTO(Long id, String dpi, String nombres, String apellidos, String telefono, String direccion, Boolean estado) {
         this.id = id;
+        this.dpi = dpi;
         this.nombres = nombres;
         this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.estado = estado;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean getEstado() {
+        return estado;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public String getNombres() {
@@ -32,11 +64,19 @@ public class EncargadoResponseDTO {
         this.nombres = nombres;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getDpi() {
+        return dpi;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setDpi(String dpi) {
+        this.dpi = dpi;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
