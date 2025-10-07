@@ -28,8 +28,9 @@ public class EncargadoMapper {
         dto.setApellidos(encargados.getApellidos());
         dto.setTelefono(encargados.getTelefono());
         dto.setDireccion(encargados.getDireccion());
-        dto.setEstado(encargados.get);
+        dto.setEstado(encargados.getEstado());
 
+        return dto;
     }
 
 

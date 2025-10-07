@@ -23,8 +23,8 @@ public class EncargadoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Encargados>> listarEncargados() {
-        List<Encargados> lista = encargadoService.listarEncargados();
+    public ResponseEntity<List<EncargadoResponseDTO>> listarEncargados() {
+        List<EncargadoResponseDTO> lista = encargadoService.listarEncargados();
         return ResponseEntity.ok(lista);
     }
 
@@ -51,7 +51,7 @@ public class EncargadoController {
             enc.setDpi(datos.getDpi());
             enc.setTelefono(datos.getTelefono());
             enc.setDireccion(datos.getDireccion());
-            enc.setEstado(datos.isEstado());
+            enc.setEstado(datos.getEstado());
             Encargados actualizado = encargadoRepository.save(enc);
             return ResponseEntity.ok(actualizado);
         }).orElse(ResponseEntity.notFound().build());

@@ -16,13 +16,20 @@ public class EncargadoServiceImpl implements EncargadoService {
 
     private final EncargadoRepository encargadoRepository;
 
+
+
     public EncargadoServiceImpl(EncargadoRepository encargadoRepository){
         this.encargadoRepository = encargadoRepository;
+
     }
 
     @Override
-    public List<Encargados> listarEncargados() {
-         return encargadoRepository.findAll();
+    public List<EncargadoResponseDTO> listarEncargados() {
+         List<Encargados> encargadosList = encargadoRepository.findAll();
+
+         return encargadosList.stream()
+                 .map(EncargadoMapper::toResponseDTO)
+                 .collect(Collectors.toList());
     }
 
     @Override

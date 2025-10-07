@@ -12,7 +12,7 @@ public interface EncargadoService {
 
 
 
-    List<Encargados> listarEncargados();
+    List<EncargadoResponseDTO> listarEncargados();
 
 
 
