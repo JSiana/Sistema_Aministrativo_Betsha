@@ -1,5 +1,5 @@
 export interface EncargadoResponse {
-    id?: number;
+    id: number;
     dpi: number;
     nombres: string;
     apellidos: string;

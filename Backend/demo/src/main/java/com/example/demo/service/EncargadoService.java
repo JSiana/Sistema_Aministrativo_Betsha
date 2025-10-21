@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AlumnoDTO;
+import com.example.demo.dto.EncargadoDTO;
 import com.example.demo.dto.EncargadoResponseDTO;
 import com.example.demo.model.Encargados;
 
@@ -14,6 +15,7 @@ public interface EncargadoService {
 
     List<EncargadoResponseDTO> listarEncargados();
 
+    EncargadoDTO obtenerEncargadoPorId(Long id);
 
 
 

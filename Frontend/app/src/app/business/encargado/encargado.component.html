@@ -1,6 +1,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="display-4 m-0">Registro de encargados</h1>
-    <button class="btn btn-primary h-25 mb-0"><i class="bi bi-plus"></i>Nuevo Encargado</button>
+    <button class="btn btn-primary h-25 mb-0" (click)="abrirModalNuevo()"><i class="bi bi-plus"
+            title="Crear Encargado"></i>Nuevo Encargado</button>
 </div>
 
 <div class="table-responsible custom-scroll">
@@ -24,11 +25,75 @@
                 <td>{{ encargado.telefono }}</td>
                 <td>{{ encargado.direccion }}</td>
                 <td>
-                    <button class="btn btn-sm btn-info me-1">Ver Información</button>
+                    <button class="btn btn-sm btn-info me-1" (click)="abrirModalVer(encargado)">Ver Información</button>
                     <button class="btn btn-sm btn-danger">Eliminar</button>
                 </td>
             </tr>
         </tbody>
 
     </table>
+</div>
+
+
+<div class="modal-backdrop show" *ngIf="mostrarModal" (click)="cerrarModal()"></div>
+
+<div class="modal d-block" *ngIf="mostrarModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Encargado</h5>
+                <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+            </div>
+
+            <div class="modal-body" *ngIf="encargadoSeleccionado">
+                <div class="row g-3">
+                    <!-- DPI -->
+                    <div class="col-md-6">
+                        <label class="form-label">DPI</label>
+                        <input type="text" class="form-control" [(ngModel)]="encargadoSeleccionado.dpi"
+                            [readonly]="!modoEdicion">
+                    </div>
+                    <!-- Noombres -->
+                    <div class="col-md-6">
+                        <label class="form-label">Nombres</label>
+                        <input type="text" class="form-control" [(ngModel)]="encargadoSeleccionado.nombres"
+                            [readonly]="!modoEdicion">
+                    </div>
+
+                    <!-- Apellido s-->
+                    <div class="col-md-6">
+                        <label class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" [(ngModel)]="encargadoSeleccionado.apellidos"
+                            [readonly]="!modoEdicion">
+                    </div>
+
+
+
+                    <!-- Teléfono -->
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" [(ngModel)]="encargadoSeleccionado.telefono"
+                            [readonly]="!modoEdicion">
+                    </div>
+
+                    <!-- direccion -->
+                    <div class="col-md-6">
+                        <label class="form-label">Direccion</label>
+                        <input type="text" class="form-control" [(ngModel)]="encargadoSeleccionado.direccion"
+                            [readonly]="!modoEdicion">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button *ngIf="!modoEdicion" class="btn btn-primary" (click)="activarEdicion()">
+                    Editar
+                </button>
+                <button *ngIf="modoEdicion" class="btn btn-success">
+                    Guardar
+                </button>
+                <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>

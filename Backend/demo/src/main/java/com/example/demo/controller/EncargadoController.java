@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.EncargadoDTO;
 import com.example.demo.dto.EncargadoResponseDTO;
 import com.example.demo.model.Encargados;
 import com.example.demo.repository.EncargadoRepository;
@@ -34,13 +35,19 @@ public class EncargadoController {
         return ResponseEntity.ok(creado);
     }
 
-    // Obtener encargado por ID
+    //Obtener encargado por id
     @GetMapping("/{id}")
-    public ResponseEntity<Encargados> obtenerEncargado(@PathVariable Long id) {
-        return encargadoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public EncargadoDTO obtenerEncargadoPorId(@PathVariable Long id){
+        return encargadoService.obtenerEncargadoPorId(id);
     }
+
+//    // Obtener encargado por ID
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Encargados> obtenerEncargado(@PathVariable Long id) {
+//        return encargadoRepository.findById(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
 
     // Actualizar encargado
     @PutMapping("/{id}")

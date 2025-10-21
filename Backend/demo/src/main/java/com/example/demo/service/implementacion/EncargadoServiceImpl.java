@@ -1,5 +1,6 @@
 package com.example.demo.service.implementacion;
 
+import com.example.demo.dto.EncargadoDTO;
 import com.example.demo.dto.EncargadoResponseDTO;
 import com.example.demo.dto.UsuarioResponseDTO;
 import com.example.demo.mapper.EncargadoMapper;
@@ -37,4 +38,20 @@ public class EncargadoServiceImpl implements EncargadoService {
         return encargadoRepository.save(encargados);
     }
 
+    @Override
+    public EncargadoDTO obtenerEncargadoPorId(Long id){
+        Encargados encargado = encargadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Encargado no encontrado"));
+
+        EncargadoDTO dto = new EncargadoDTO();
+        dto.setId(encargado.getId());
+        dto.setDpi(encargado.getDpi());
+        dto.setNombres(encargado.getNombres());
+        dto.setApellidos(encargado.getApellidos());
+        dto.setTelefono(encargado.getTelefono());
+        dto.setDireccion(encargado.getDireccion());
+        dto.setEstado(encargado.getEstado());
+
+        return dto;
+    }
 }
