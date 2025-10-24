@@ -24,4 +24,9 @@ export class EncargadoService {
     return this.http.get<EncargadoDTO>(`${this.apiUrl}/${id}`);
   }
 
+  // Crear encargado
+  crearEncargado(encargado: EncargadoDTO): Observable<EncargadoDTO>{
+    return this.http.post<EncargadoDTO>(this.apiUrl, encargado);
+  }
+
 }

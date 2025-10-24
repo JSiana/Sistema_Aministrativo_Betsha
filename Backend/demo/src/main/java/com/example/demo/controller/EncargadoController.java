@@ -7,6 +7,7 @@ import com.example.demo.repository.EncargadoRepository;
 import com.example.demo.service.EncargadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class EncargadoController {
         return ResponseEntity.ok(lista);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping
     public ResponseEntity<Encargados> crearEncargado(@RequestBody Encargados encargado){
         Encargados creado = encargadoRepository.save(encargado);
@@ -40,14 +42,6 @@ public class EncargadoController {
     public EncargadoDTO obtenerEncargadoPorId(@PathVariable Long id){
         return encargadoService.obtenerEncargadoPorId(id);
     }
-
-//    // Obtener encargado por ID
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Encargados> obtenerEncargado(@PathVariable Long id) {
-//        return encargadoRepository.findById(id)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
 
     // Actualizar encargado
     @PutMapping("/{id}")
