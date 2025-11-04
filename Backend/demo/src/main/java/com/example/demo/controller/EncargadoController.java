@@ -6,6 +6,7 @@ import com.example.demo.model.Encargados;
 import com.example.demo.repository.EncargadoRepository;
 import com.example.demo.service.EncargadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +33,32 @@ public class EncargadoController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping
-    public ResponseEntity<Encargados> crearEncargado(@RequestBody Encargados encargado){
-        Encargados creado = encargadoRepository.save(encargado);
-        return ResponseEntity.ok(creado);
+    public ResponseEntity<?> crearEncargado(@RequestBody EncargadoDTO encargadoDTO){
+
+        //Validar nombre DPI de encargado
+        if (encargadoService.existeDpiEncargado(encargadoDTO.getDpi())){
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("El DPI del encargado ya esta registrado");
+        }
+
+        //Crear encargado por DTO
+        Encargados encargado = new Encargados();
+        encargado.setDpi(encargadoDTO.getDpi());
+        encargado.setNombres(encargadoDTO.getNombres());
+        encargado.setApellidos(encargadoDTO.getApellidos());
+        encargado.setTelefono(encargadoDTO.getTelefono());
+        encargado.setDireccion(encargadoDTO.getDireccion());
+
+
+        Encargados nuevoEncargado = encargadoService.crearEncargado(encargado);
+
+        //Respuesta del DTO
+
+
+
+
+        return ResponseEntity.ok(nuevoEncargado);
     }
 
     //Obtener encargado por id

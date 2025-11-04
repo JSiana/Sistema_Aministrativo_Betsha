@@ -17,6 +17,7 @@ public interface EncargadoService {
 
     EncargadoDTO obtenerEncargadoPorId(Long id);
 
+    boolean existeDpiEncargado(String dpiEncargado);
 
 
 }

@@ -25,6 +25,12 @@ public class EncargadoServiceImpl implements EncargadoService {
     }
 
     @Override
+    public boolean existeDpiEncargado(String dpiEncargado){
+        return encargadoRepository.existsByDpi(dpiEncargado);
+    }
+
+
+    @Override
     public List<EncargadoResponseDTO> listarEncargados() {
          List<Encargados> encargadosList = encargadoRepository.findAll();
 

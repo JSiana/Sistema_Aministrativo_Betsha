@@ -37,7 +37,7 @@ export class UserComponent {
   abrirFormulario() {
     this.usuarioSeleccionado = { usuario: '', nombre: '', email: '', rolNombre: '' };
     this.mostrarFormulario = true;
-    this.rolSeleccionadoId =null;
+    this.rolSeleccionadoId = null;
   }
 
   abrirFormularioEdicion(usuario: Usuarios) {
@@ -73,21 +73,21 @@ export class UserComponent {
         this.usuarios = data;
       },
       error: (e) => {
-      
-      if (e.status === 403) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Acceso denegado',
-          text: 'No tienes permiso para ver esta sección',
-          confirmButtonText: 'Aceptar'
-        }).then(() => {
-          this.router.navigate(['/dashboard']);
-        });
-      } else {
-        this.mensajeError = 'Error al cargar los usuarios';
-        console.log(e);
+
+        if (e.status === 403) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Acceso denegado',
+            text: 'No tienes permiso para ver esta sección',
+            confirmButtonText: 'Aceptar'
+          }).then(() => {
+            this.router.navigate(['/dashboard']);
+          });
+        } else {
+          this.mensajeError = 'Error al cargar los usuarios';
+          console.log(e);
+        }
       }
-    }
     });
 
   }
@@ -126,7 +126,7 @@ export class UserComponent {
         next: () => {
           Swal.fire({
             icon: 'success',
-            text:'El usuario se creo correctamente',
+            text: 'El usuario se creo correctamente',
             showCancelButton: false
           });
           this.cargarUsuarios();
@@ -134,12 +134,12 @@ export class UserComponent {
         },
         error: (e) => {
           console.error('Error al crear usuario', e);
-          if (e.status === 409){
+          if (e.status === 409) {
             Swal.fire({
               icon: 'error',
               text: e.error || 'El nombre de Usuario o Email ya esta registrado',
             });
-          } else{
+          } else {
             Swal.fire({
               icon: 'error',
               text: 'Ocurrio un error inesperado, intentelo de nuevo',

@@ -73,7 +73,9 @@ export class EncargadoComponent {
   }
 
 
-  crearEncargado(): void {
+  guardarEncargado(): void {
+
+
     this.encargadoService.crearEncargado(this.nuevoEncargado).subscribe(
       (data) => {
 
@@ -94,23 +96,23 @@ export class EncargadoComponent {
         this.cerrarModal();
 
       },
-     /** error: (e) => {
+     /**  error: (e) => {
         console.error('Error al crear encargado', e);
-        if(e.status === 409) {
+        if (e.status === 409) {
           Swal.fire({
             icon: 'error',
             text: e.error || 'El DPI ya esta registrado',
           });
         }
-        else{
+        else {
           Swal.fire({
             icon: 'error',
             text: 'Ocurrió un error inesperado, intentalo de nuevo',
-          })
+          });
         }
       }
-        
-*/
-    )
+        */
+       )
   }
+   
 }
