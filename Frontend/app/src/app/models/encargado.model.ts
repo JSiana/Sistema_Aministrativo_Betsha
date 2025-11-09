@@ -10,7 +10,7 @@ export interface EncargadoResponse {
 
 export interface EncargadoDTO{
     id?: number;
-    dpi: number | null;
+    dpi: string;
     nombres: string;
     apellidos: string;
     telefono: string;

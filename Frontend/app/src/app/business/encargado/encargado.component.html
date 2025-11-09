@@ -86,10 +86,19 @@
             </div>
 
             <div class="modal-footer">
-                <button *ngIf="!modoEdicion" class="btn btn-primary" (click)="activarEdicion()">
+                <button 
+                *ngIf="!modoEdicion" 
+                type="button"
+                class="btn btn-primary" 
+                (click)="activarEdicion()">
                     Editar
                 </button>
-                <button *ngIf="modoEdicion" class="btn btn-success">
+                <button 
+                *ngIf="modoEdicion" 
+                type="button"
+                class="btn btn-success"
+                (click)="guardarEncargado()">
+                
                     Guardar
                 </button>
                 <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>

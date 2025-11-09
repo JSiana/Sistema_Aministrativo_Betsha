@@ -13,26 +13,27 @@ export class EncargadoComponent {
 
   mostrarModal: boolean = false;
   modoEdicion: boolean = false;
-  encargadoSeleccionado: EncargadoDTO | null = null;
+  encargadoSeleccionado: EncargadoDTO = this.crearEncargadoVacio();
 
   constructor(private encargadoService: EncargadoService) { }
 
-  nuevoEncargado: EncargadoDTO = {
-    dpi: null,
-    nombres: '',
-    apellidos: '',
-    telefono: '',
-    direccion: ''
+  ngOnInit(): void {
+    this.cargarEncargados();
   }
 
-  abrirModalNuevo() {
-    this.encargadoSeleccionado = {
-      dpi: null,
+  // Crear un objeto vacio para inicializar
+  private crearEncargadoVacio(): EncargadoDTO {
+    return {
+      dpi: '',
       nombres: '',
       apellidos: '',
       telefono: '',
       direccion: ''
     }
+  }
+
+  abrirModalNuevo() {
+    this.encargadoSeleccionado = this.crearEncargadoVacio();
     this.mostrarModal = true;
     this.modoEdicion = true;
   }
@@ -53,10 +54,6 @@ export class EncargadoComponent {
     this.modoEdicion = true;
   }
 
-  ngOnInit(): void {
-    this.cargarEncargados();
-  }
-
 
   encargados: EncargadoResponse[] = [];
 
@@ -69,50 +66,40 @@ export class EncargadoComponent {
 
   cerrarModal() {
     this.mostrarModal = false;
-    this.encargadoSeleccionado = null;
+    this.encargadoSeleccionado = this.crearEncargadoVacio();
   }
-
 
   guardarEncargado(): void {
+    console.log('Datos a guardar:', this.encargadoSeleccionado);
 
+    const { dpi, nombres, apellidos, telefono, direccion } = this.encargadoSeleccionado;
 
-    this.encargadoService.crearEncargado(this.nuevoEncargado).subscribe(
-      (data) => {
+    if (!dpi || !nombres || !apellidos || !telefono || !direccion) {
+      Swal.fire({
+        icon: 'warning',
+        text: 'Todos los campos son obligatorios',
+      });
+      return;
+    }
 
+    this.encargadoService.crearEncargado(this.encargadoSeleccionado).subscribe({
+      next: () => {
         Swal.fire({
           icon: 'success',
-          text: 'El encargado se creó correctamente',
-          showCancelButton: false
-        })
-
-        this.nuevoEncargado = {
-          dpi: null,
-          nombres: '',
-          apellidos: '',
-          telefono: '',
-          direccion: ''
-        }
+          text: 'Encargado creado correctamente',
+        });
         this.cargarEncargados();
         this.cerrarModal();
-
       },
-     /**  error: (e) => {
+      error: (e) => {
         console.error('Error al crear encargado', e);
         if (e.status === 409) {
-          Swal.fire({
-            icon: 'error',
-            text: e.error || 'El DPI ya esta registrado',
-          });
-        }
-        else {
-          Swal.fire({
-            icon: 'error',
-            text: 'Ocurrió un error inesperado, intentalo de nuevo',
-          });
+          Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
+        } else {
+          Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
         }
       }
-        */
-       )
+    });
   }
-   
+
 }
