@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import com.example.demo.model.Encargados;
+
 public class EncargadoResponseDTO {
 
     private Long id;
@@ -22,6 +24,16 @@ public class EncargadoResponseDTO {
         this.telefono = telefono;
         this.direccion = direccion;
         this.estado = estado;
+    }
+
+    public EncargadoResponseDTO(Encargados encargado) {
+        this.id = encargado.getId();
+        this.dpi = encargado.getDpi();
+        this.nombres = encargado.getNombres();
+        this.apellidos = encargado.getApellidos();
+        this.telefono = encargado.getTelefono();
+        this.direccion = encargado.getDireccion();
+        this.estado = encargado.getEstado();
     }
 
     public Boolean getEstado() {

@@ -20,4 +20,6 @@ public interface EncargadoService {
     boolean existeDpiEncargado(String dpiEncargado);
 
 
+    EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto);
+
 }

@@ -7,7 +7,9 @@ import com.example.demo.mapper.EncargadoMapper;
 import com.example.demo.model.Encargados;
 import com.example.demo.repository.EncargadoRepository;
 import com.example.demo.service.EncargadoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,4 +62,26 @@ public class EncargadoServiceImpl implements EncargadoService {
 
         return dto;
     }
+
+    @Override
+    public EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto){
+
+        Encargados encargado = encargadoRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Encargado no encontrado con ID: " + id ));
+
+        //Actualizamos los campos
+        encargado.setDpi(dto.getDpi());
+        encargado.setNombres(dto.getNombres());
+        encargado.setApellidos(dto.getApellidos());
+        encargado.setTelefono(dto.getTelefono());
+        encargado.setDireccion(dto.getDireccion());
+
+        encargadoRepository.save(encargado);
+
+        return new EncargadoResponseDTO(encargado);
+
+    }
+
+
 }

@@ -69,17 +69,12 @@ public class EncargadoController {
 
     // Actualizar encargado
     @PutMapping("/{id}")
-    public ResponseEntity<Encargados> actualizarEncargado(@PathVariable Long id, @RequestBody Encargados datos) {
-        return encargadoRepository.findById(id).map(enc -> {
-            enc.setNombres(datos.getNombres());
-            enc.setApellidos(datos.getApellidos());
-            enc.setDpi(datos.getDpi());
-            enc.setTelefono(datos.getTelefono());
-            enc.setDireccion(datos.getDireccion());
-            enc.setEstado(datos.getEstado());
-            Encargados actualizado = encargadoRepository.save(enc);
-            return ResponseEntity.ok(actualizado);
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<EncargadoResponseDTO> actualizarEncargado(
+        @PathVariable Long id,
+        @RequestBody EncargadoDTO dto){
+
+        EncargadoResponseDTO response = encargadoService.actualizarEncargado(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     // Eliminar encargado
