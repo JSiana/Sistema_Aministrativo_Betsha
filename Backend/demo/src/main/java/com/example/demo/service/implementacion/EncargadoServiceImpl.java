@@ -65,12 +65,20 @@ public class EncargadoServiceImpl implements EncargadoService {
 
     @Override
     public EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto){
+        System.out.println("Actualizando encargado con ID: " + id);
+        System.out.println("Datos del DTO: " + dto);
 
         Encargados encargado = encargadoRepository.findById(id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Encargado no encontrado con ID: " + id ));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Encargado no encontrado con ID: " + id));
 
-        //Actualizamos los campos
+        // Verificar DPI duplicado
+//        if (encargadoRepository.existsByDpiAndIdNot(dto.getDpi(), id)) {
+//            throw new ResponseStatusException(HttpStatus.CONFLICT,
+//                    "El DPI del encargado ya está registrado");
+//        }
+
+        // Actualizar campos
         encargado.setDpi(dto.getDpi());
         encargado.setNombres(dto.getNombres());
         encargado.setApellidos(dto.getApellidos());
@@ -80,7 +88,6 @@ public class EncargadoServiceImpl implements EncargadoService {
         encargadoRepository.save(encargado);
 
         return new EncargadoResponseDTO(encargado);
-
     }
 
 

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,13 +35,9 @@ public class EncargadoController {
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping
     public ResponseEntity<?> crearEncargado(@RequestBody EncargadoDTO encargadoDTO){
-
         //Validar nombre DPI de encargado
-        if (encargadoService.existeDpiEncargado(encargadoDTO.getDpi())){
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("El DPI del encargado ya esta registrado");
-        }
+        if (encargadoService.existeDpiEncargado(encargadoDTO.getDpi())){ return ResponseEntity .status(HttpStatus.CONFLICT)
+                .body("El DPI del encargado ya esta registrado"); }
 
         //Crear encargado por DTO
         Encargados encargado = new Encargados();
@@ -49,17 +46,12 @@ public class EncargadoController {
         encargado.setApellidos(encargadoDTO.getApellidos());
         encargado.setTelefono(encargadoDTO.getTelefono());
         encargado.setDireccion(encargadoDTO.getDireccion());
-
-
         Encargados nuevoEncargado = encargadoService.crearEncargado(encargado);
 
         //Respuesta del DTO
-
-
-
-
         return ResponseEntity.ok(nuevoEncargado);
     }
+
 
     //Obtener encargado por id
     @GetMapping("/{id}")
@@ -68,14 +60,17 @@ public class EncargadoController {
     }
 
     // Actualizar encargado
+
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PutMapping("/{id}")
     public ResponseEntity<EncargadoResponseDTO> actualizarEncargado(
-        @PathVariable Long id,
-        @RequestBody EncargadoDTO dto){
-
+            @PathVariable Long id,
+            @RequestBody EncargadoDTO dto){
         EncargadoResponseDTO response = encargadoService.actualizarEncargado(id, dto);
         return ResponseEntity.ok(response);
     }
+
 
     // Eliminar encargado
     @DeleteMapping("/{id}")

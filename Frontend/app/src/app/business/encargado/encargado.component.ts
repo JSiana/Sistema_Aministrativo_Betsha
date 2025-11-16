@@ -34,6 +34,7 @@ export class EncargadoComponent {
 
   abrirModalNuevo() {
     this.encargadoSeleccionado = this.crearEncargadoVacio();
+
     this.mostrarModal = true;
     this.modoEdicion = true;
   }
@@ -69,37 +70,58 @@ export class EncargadoComponent {
     this.encargadoSeleccionado = this.crearEncargadoVacio();
   }
 
-  guardarEncargado(): void {
-    console.log('Datos a guardar:', this.encargadoSeleccionado);
+guardarEncargado(): void {
+  const { id, dpi, nombres, apellidos, telefono, direccion } = this.encargadoSeleccionado;
 
-    const { dpi, nombres, apellidos, telefono, direccion } = this.encargadoSeleccionado;
-
-    if (!dpi || !nombres || !apellidos || !telefono || !direccion) {
-      Swal.fire({
-        icon: 'warning',
-        text: 'Todos los campos son obligatorios',
-      });
-      return;
-    }
-
-    this.encargadoService.crearEncargado(this.encargadoSeleccionado).subscribe({
-      next: () => {
-        Swal.fire({
-          icon: 'success',
-          text: 'Encargado creado correctamente',
-        });
-        this.cargarEncargados();
-        this.cerrarModal();
-      },
-      error: (e) => {
-        console.error('Error al crear encargado', e);
-        if (e.status === 409) {
-          Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
-        } else {
-          Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
-        }
-      }
-    });
+  // Validación de campos obligatorios
+  if (!dpi || !nombres || !apellidos || !telefono || !direccion) {
+    Swal.fire({ icon: 'warning', text: 'Todos los campos son obligatorios' });
+    return;
   }
+
+  // 🔹 Aquí agregamos los console.log
+  console.log("Encargado a guardar:", this.encargadoSeleccionado);
+  console.log("ID del encargado:", id);
+
+  if (id) {
+    // Si tiene ID → actualizar
+    this.encargadoService.actualizarEncargado(id, this.encargadoSeleccionado)
+      .subscribe({
+        next: () => {
+          Swal.fire({ icon: 'success', text: 'Encargado actualizado correctamente' });
+          this.cargarEncargados();
+          this.cerrarModal();
+        },
+        error: (e) => {
+          if (e.status === 409) {
+            Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
+          } else {
+            Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
+          }
+        }
+      });
+  } else {
+    // Si NO tiene ID → crear
+    this.encargadoService.crearEncargado(this.encargadoSeleccionado)
+      .subscribe({
+        next: () => {
+          Swal.fire({ icon: 'success', text: 'Encargado creado correctamente' });
+          this.cargarEncargados();
+          this.cerrarModal();
+        },
+        error: (e) => {
+          if (e.status === 409) {
+            Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
+          } else {
+            Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
+          }
+        }
+      });
+  }
+}
+
+
+
+
 
 }

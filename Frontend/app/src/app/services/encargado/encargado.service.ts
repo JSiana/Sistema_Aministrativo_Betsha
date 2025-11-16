@@ -12,21 +12,25 @@ export class EncargadoService {
 
   constructor(private http: HttpClient) { }
 
-  
+
 
   // Listar encargados
-  listarEncargado(): Observable<EncargadoResponse[]>{
+  listarEncargado(): Observable<EncargadoResponse[]> {
     return this.http.get<EncargadoResponse[]>(this.apiUrl);
   }
 
   // Obtener encargado completo por ID
-  obtenerEncargadoPorId(id: number): Observable<EncargadoDTO>{
+  obtenerEncargadoPorId(id: number): Observable<EncargadoDTO> {
     return this.http.get<EncargadoDTO>(`${this.apiUrl}/${id}`);
   }
 
   // Crear encargado
-  crearEncargado(encargado: EncargadoDTO): Observable<EncargadoDTO>{
+  crearEncargado(encargado: EncargadoDTO): Observable<EncargadoDTO> {
     return this.http.post<EncargadoDTO>(this.apiUrl, encargado);
   }
 
+  // Actualizar encargado
+    actualizarEncargado(id: number, dto: EncargadoDTO): Observable<EncargadoDTO> {
+    return this.http.put<EncargadoDTO>(`${this.apiUrl}/${id}`, dto);
+  }
 }

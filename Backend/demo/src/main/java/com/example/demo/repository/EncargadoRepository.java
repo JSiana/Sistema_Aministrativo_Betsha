@@ -9,5 +9,8 @@ public interface EncargadoRepository extends JpaRepository<Encargados, Long> {
 
     boolean existsByDpi(String dpi);
 
+    // Verifica si existe un DPI en otro registro distinto al ID dado (para actualizar)
+    boolean existsByDpiAndIdNot(String dpi, Long id);
+
 
 }
