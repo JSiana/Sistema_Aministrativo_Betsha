@@ -78,10 +78,19 @@ guardarEncargado(): void {
     Swal.fire({ icon: 'warning', text: 'Todos los campos son obligatorios' });
     return;
   }
+    if (!/^\d{13}$/.test(dpi)) {
+    Swal.fire({ icon: 'warning', text: 'El DPI debe tener exactamente 13 dígitos' });
+    return;
+  }
+
+  if (!/^\d{8}$/.test(telefono)) {
+    Swal.fire({ icon: 'warning', text: 'El teléfono debe tener exactamente 8 dígitos' });
+    return;
+  }
 
   // 🔹 Aquí agregamos los console.log
-  console.log("Encargado a guardar:", this.encargadoSeleccionado);
-  console.log("ID del encargado:", id);
+ // console.log("Encargado a guardar:", this.encargadoSeleccionado);
+  // onsole.log("ID del encargado:", id);
 
   if (id) {
     // Si tiene ID → actualizar

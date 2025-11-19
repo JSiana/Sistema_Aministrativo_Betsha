@@ -10,6 +10,7 @@ import com.example.demo.service.EncargadoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Optional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,19 +65,25 @@ public class EncargadoServiceImpl implements EncargadoService {
     }
 
     @Override
-    public EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto){
-        System.out.println("Actualizando encargado con ID: " + id);
-        System.out.println("Datos del DTO: " + dto);
+    public EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto) {
+
+        System.out.println("ENTRÓ AL SERVICIO - ACTUALIZAR ENCARGADO");
 
         Encargados encargado = encargadoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Encargado no encontrado con ID: " + id));
 
-        // Verificar DPI duplicado
-//        if (encargadoRepository.existsByDpiAndIdNot(dto.getDpi(), id)) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT,
-//                    "El DPI del encargado ya está registrado");
-//        }
+        System.out.println("DPI recibido: " + dto.getDpi());
+
+        // Validar DPI duplicado
+        Optional<Encargados> otro = encargadoRepository.findByDpi(dto.getDpi());
+
+        // Si existe y NO es el mismo encargado que estamos actualizando, lanzamos 409
+        System.out.println("Otro: " + otro);
+        if (otro.isPresent() && !otro.get().getId().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "El DPI del encargado ya está registrado");
+        }
 
         // Actualizar campos
         encargado.setDpi(dto.getDpi());
@@ -89,6 +96,7 @@ public class EncargadoServiceImpl implements EncargadoService {
 
         return new EncargadoResponseDTO(encargado);
     }
+
 
 
 }
