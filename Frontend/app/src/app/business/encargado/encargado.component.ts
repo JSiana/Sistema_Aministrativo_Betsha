@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EncargadoService } from '../../services/encargado/encargado.service';
 import { EncargadoDTO, EncargadoResponse } from '../../models/encargado.model';
 import Swal from 'sweetalert2';
+import { ApiResponse } from '../../models/api-response.model';
 
 @Component({
   selector: 'app-encargado',
@@ -130,6 +131,36 @@ guardarEncargado(): void {
 }
 
 
+eliminarEncargado(id: number) {
+    // Confirmación antes de eliminar
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esto",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Llamada al backend
+        this.encargadoService.eliminarEncargado(id).subscribe({
+          next: (res: ApiResponse) => {
+            if (res.success) {
+              Swal.fire('Eliminado', res.message, 'success');
+              this.cargarEncargados();
+            } else {
+              Swal.fire('Atención', res.message, 'warning');
+            }
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Error', 'Ocurrió un error al eliminar el encargado', 'error');
+          }
+        });
+      }
+    });
+  }
 
 
 

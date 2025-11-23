@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.Encargados;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
@@ -14,6 +15,7 @@ public interface EncargadoRepository extends JpaRepository<Encargados, Long> {
     boolean existsByDpiAndIdNot(String dpi, Long id);
 
     Optional<Encargados> findByDpi(String dpi);
+
 
 
 }

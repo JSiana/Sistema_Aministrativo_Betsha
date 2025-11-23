@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.EncargadoDTO;
 import com.example.demo.dto.EncargadoResponseDTO;
 import com.example.demo.model.Encargados;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -21,6 +24,7 @@ public class EncargadoController {
     private EncargadoRepository encargadoRepository;
 
     private final EncargadoService encargadoService;
+    private final Logger logger = LoggerFactory.getLogger(EncargadoController.class);
 
     public EncargadoController(EncargadoService encargadoService){
         this.encargadoService = encargadoService;
@@ -74,13 +78,13 @@ public class EncargadoController {
 
     // Eliminar encargado
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEncargado(@PathVariable Long id) {
-        if (encargadoRepository.existsById(id)) {
-            encargadoRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse> eliminar(@PathVariable Long id) {
+        ApiResponse response = encargadoService.eliminarEncargado(id);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(404).body(response);
         }
-        return ResponseEntity.notFound().build();
     }
-
 
 }

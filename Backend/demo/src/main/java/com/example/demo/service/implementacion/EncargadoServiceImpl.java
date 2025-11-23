@@ -1,5 +1,6 @@
 package com.example.demo.service.implementacion;
 
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.EncargadoDTO;
 import com.example.demo.dto.EncargadoResponseDTO;
 import com.example.demo.dto.UsuarioResponseDTO;
@@ -11,10 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class EncargadoServiceImpl implements EncargadoService {
 
@@ -67,19 +71,17 @@ public class EncargadoServiceImpl implements EncargadoService {
     @Override
     public EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto) {
 
-        System.out.println("ENTRÓ AL SERVICIO - ACTUALIZAR ENCARGADO");
+
 
         Encargados encargado = encargadoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Encargado no encontrado con ID: " + id));
 
-        System.out.println("DPI recibido: " + dto.getDpi());
 
         // Validar DPI duplicado
         Optional<Encargados> otro = encargadoRepository.findByDpi(dto.getDpi());
 
-        // Si existe y NO es el mismo encargado que estamos actualizando, lanzamos 409
-        System.out.println("Otro: " + otro);
+
         if (otro.isPresent() && !otro.get().getId().equals(id)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "El DPI del encargado ya está registrado");
@@ -98,5 +100,21 @@ public class EncargadoServiceImpl implements EncargadoService {
     }
 
 
+    @Override
+    public ApiResponse eliminarEncargado(Long id) {
+        try {
+            if (encargadoRepository.existsById(id)) {
+                encargadoRepository.deleteById(id);
+                log.info("Encargado con ID {} eliminado correctamente", id);
+                return new ApiResponse(true, "Encargado eliminado correctamente");
+            } else {
+                log.warn("No se encontró encargado con ID {}", id);
+                return new ApiResponse(false, "El encargado con ID " + id + " no existe");
+            }
+        } catch (Exception e) {
+            log.error("Error eliminando encargado con ID {}: {}", id, e.getMessage());
+            return new ApiResponse(false, "Ocurrió un error al eliminar el encargado");
+        }
+    }
 
 }

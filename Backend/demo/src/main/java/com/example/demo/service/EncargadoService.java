@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AlumnoDTO;
+import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.EncargadoDTO;
 import com.example.demo.dto.EncargadoResponseDTO;
 import com.example.demo.model.Encargados;
@@ -21,5 +22,7 @@ public interface EncargadoService {
 
 
     EncargadoResponseDTO actualizarEncargado(Long id, EncargadoDTO dto);
+
+    ApiResponse eliminarEncargado(Long id);
 
 }

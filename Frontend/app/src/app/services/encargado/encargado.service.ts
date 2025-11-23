@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EncargadoDTO, EncargadoResponse } from '../../models/encargado.model';
+import { ApiResponse } from '../../models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,4 +34,11 @@ export class EncargadoService {
     actualizarEncargado(id: number, dto: EncargadoDTO): Observable<EncargadoDTO> {
     return this.http.put<EncargadoDTO>(`${this.apiUrl}/${id}`, dto);
   }
+
+
+  // Eliminar encargado
+ eliminarEncargado(id: number): Observable<ApiResponse> {
+  return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`);
+}
+
 }

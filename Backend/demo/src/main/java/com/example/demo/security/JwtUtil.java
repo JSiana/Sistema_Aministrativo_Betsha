@@ -23,7 +23,7 @@ public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    private static final long EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutos
+    private static final long EXPIRATION_TIME = 30 * 60 * 1000; // 15 minutos
 
     public String generateToken(String username, String rol) {
 
