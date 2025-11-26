@@ -22,7 +22,7 @@ import { PagosComponent } from './business/pagos/pagos.component';
 import { ReportesComponent } from './business/reportes/reportes.component';
 import { CierreComponent } from './business/cierre/cierre.component';
 import { ConfiguracionComponent } from './business/configuracion/configuracion.component';
-import { NgxPaginationModule} from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { AlumnoFormComponent } from './business/alumno-form/alumno-form.component';
 import { UsersFormComponent } from './business/users-form/users-form.component';
 import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
@@ -30,10 +30,10 @@ import { NgChartsModule } from 'ng2-charts';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EncargadoComponent } from './business/encargado/encargado.component';
-
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -69,7 +69,8 @@ import { EncargadoComponent } from './business/encargado/encargado.component';
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [
     {

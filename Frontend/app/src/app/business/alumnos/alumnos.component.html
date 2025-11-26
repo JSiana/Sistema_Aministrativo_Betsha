@@ -36,7 +36,7 @@
           {{ alumno.primerApellido }}
           {{ alumno.segundoApellido || '' }}
         </td>
-        <td> 
+        <td>
           {{ alumno.nombreEncargado || '' }} {{ alumno.apellidoEncargado || '' }}
         </td>
         <td>
@@ -144,8 +144,19 @@
 
           <!-- ID Encargado -->
           <div class="col-md-6">
-            <label class="form-label">Encargado</label>
-         
+            <label for="encargado" class="form-label">Encargado</label>
+            
+              <select class="form-select" name="encargado" id="encargado" required
+                [(ngModel)]="encargadoSeleccionadoId" #encargado="ngModel">
+                <option [ngValue]="null" disabled selected>Seleccione un encargado</option>
+                <option *ngFor="let encargado of encargados" [ngValue]="encargado.id">
+                  {{encargado.nombres}} {{encargado.apellidos}}
+                </option>
+              </select>
+            
+            <div *ngIf="encargado.invalid && encargado.touched" class="text-danger">
+              El encargado es obligatorio
+            </div>
           </div>
 
           <!-- Estado 

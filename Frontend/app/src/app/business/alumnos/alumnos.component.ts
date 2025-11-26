@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AlumnoDTO, AlumnoResponse } from '../../models/alumno.model';
 import { MatDialog } from '@angular/material/dialog';
 import { AlumnoService } from '../../services/alumno/alumno.service';
+import { EncargadoService } from '../../services/encargado/encargado.service';
+import { EncargadoDTO, EncargadoResponse } from '../../models/encargado.model';
+
+
 
 export interface ResultadoAlumnoModal {
   guardado: boolean;
@@ -19,6 +23,9 @@ export class AlumnosComponent implements OnInit {
   mostrarModal: boolean = false;
   alumnoSeleccionado: AlumnoDTO | null = null;
   modoEdicion: boolean = false;
+  encargados: EncargadoResponse[] = [];
+  encargadoSeleccionadoId: number | null = null;
+
 
 
   abrirModalNuevo() {
@@ -47,10 +54,37 @@ export class AlumnosComponent implements OnInit {
 
   alumnos: AlumnoResponse[] = [];
 
-  constructor(private dialog: MatDialog, private alumnoService: AlumnoService) { }
+  constructor(
+    private dialog: MatDialog, 
+    private alumnoService: AlumnoService,
+    private encargadoService: EncargadoService
+  ) { 
+
+  }
+
+  /**
+   * Metodo para cargar encargados dentro del modal en un select
+   */
+  cargarEncargados(): void {
+      this.encargadoService.listarEncargado().subscribe({
+    next: (data) => {
+
+      // Ordenar por nombres A → Z
+      this.encargados = data.sort((a: any, b: any) =>
+        a.nombres.toLowerCase().localeCompare(b.nombres.toLowerCase())
+      );
+
+    },
+    error: (e) => {
+      console.log('Error al cargar encargados ' + e);
+    }
+  });
+  }
+
 
   ngOnInit(): void {
     this.cargarAlumnos();
+    this.cargarEncargados();
   }
 
   cargarAlumnos(): void {
