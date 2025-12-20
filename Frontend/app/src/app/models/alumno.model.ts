@@ -6,8 +6,10 @@ export interface AlumnoResponse {
   tercerNombre?: string;
   primerApellido: string;
   segundoApellido?: string;
+  sexo:string | null;
   nombreEncargado?: string;
   apellidoEncargado?: string;
+  telefono: string;
   estado: boolean;
 }
 
@@ -20,11 +22,10 @@ export interface AlumnoDTO {
   primerApellido: string;
   segundoApellido?: string;
   email: string;
-  fechaNacimiento: string; 
+  fechaNacimiento: string;
+  sexo: string | null; 
   ultimoGrado: string;
   telefono: string;
   estado: boolean;
-  idEncargado: number;
-  nombreEncargado: string;
-  apellidoEncargado: string;
+  idEncargado: number | null;
 }

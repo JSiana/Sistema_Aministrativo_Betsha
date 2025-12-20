@@ -4,7 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AlumnoService } from '../../services/alumno/alumno.service';
 import { EncargadoService } from '../../services/encargado/encargado.service';
 import { EncargadoDTO, EncargadoResponse } from '../../models/encargado.model';
-
+import Swal from 'sweetalert2';
+import { SequenceError } from 'rxjs';
 
 
 export interface ResultadoAlumnoModal {
@@ -21,15 +22,17 @@ export interface ResultadoAlumnoModal {
 export class AlumnosComponent implements OnInit {
 
   mostrarModal: boolean = false;
-  alumnoSeleccionado: AlumnoDTO | null = null;
+  alumnoSeleccionado: AlumnoDTO = this.crearAlumnoVacio();
   modoEdicion: boolean = false;
   encargados: EncargadoResponse[] = [];
   encargadoSeleccionadoId: number | null = null;
 
 
-
-  abrirModalNuevo() {
-    this.alumnoSeleccionado = {
+  /**
+   * Crear un objeto vacio para inicializar
+   */
+  private crearAlumnoVacio(): AlumnoDTO {
+    return {
       codigoPersonal: '',
       primerNombre: '',
       segundoNombre: '',
@@ -38,13 +41,17 @@ export class AlumnosComponent implements OnInit {
       segundoApellido: '',
       email: '',
       fechaNacimiento: '',
+      sexo: null,
       ultimoGrado: '',
       telefono: '',
       estado: true,
-      idEncargado: 0,
-      nombreEncargado: '',
-      apellidoEncargado: ''
+      idEncargado: null
     };
+  }
+
+
+  abrirModalNuevo() {
+    this.alumnoSeleccionado = this.crearAlumnoVacio();
     this.mostrarModal = true;
     this.modoEdicion = true;
   }
@@ -55,10 +62,10 @@ export class AlumnosComponent implements OnInit {
   alumnos: AlumnoResponse[] = [];
 
   constructor(
-    private dialog: MatDialog, 
+    private dialog: MatDialog,
     private alumnoService: AlumnoService,
     private encargadoService: EncargadoService
-  ) { 
+  ) {
 
   }
 
@@ -66,19 +73,19 @@ export class AlumnosComponent implements OnInit {
    * Metodo para cargar encargados dentro del modal en un select
    */
   cargarEncargados(): void {
-      this.encargadoService.listarEncargado().subscribe({
-    next: (data) => {
+    this.encargadoService.listarEncargado().subscribe({
+      next: (data) => {
 
-      // Ordenar por nombres A → Z
-      this.encargados = data.sort((a: any, b: any) =>
-        a.nombres.toLowerCase().localeCompare(b.nombres.toLowerCase())
-      );
+        // Ordenar por nombres A → Z
+        this.encargados = data.sort((a: any, b: any) =>
+          a.nombres.toLowerCase().localeCompare(b.nombres.toLowerCase())
+        );
 
-    },
-    error: (e) => {
-      console.log('Error al cargar encargados ' + e);
-    }
-  });
+      },
+      error: (e) => {
+        console.log('Error al cargar encargados ' + e);
+      }
+    });
   }
 
 
@@ -112,12 +119,28 @@ export class AlumnosComponent implements OnInit {
     this.modoEdicion = true;
   }
 
-  eliminarAlumno(alumno: AlumnoResponse): void {
+  async eliminarAlumno(alumno: AlumnoResponse): Promise<void> {
     if (!alumno.id) return;
-    const confirmado = confirm(`¿Seguro de eliminar a ${alumno.primerNombre} ${alumno.primerApellido}?`);
-    if (confirmado) {
+
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Seguro que quieres eliminar a ${alumno.primerNombre} ${alumno.primerApellido}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    });
+
+    if (result.isConfirmed) {
       this.alumnoService.eliminarAlumno(alumno.id).subscribe({
-        next: () => this.cargarAlumnos(),
+        next: () => {
+          this.cargarAlumnos();
+          Swal.fire({
+            icon: 'success',
+            text: 'Alumno eliminado correctamente'
+          });
+        },
         error: (err) => console.error('Error al eliminar', err)
       });
     }
@@ -126,12 +149,106 @@ export class AlumnosComponent implements OnInit {
 
   cerrarModal() {
     this.mostrarModal = false;
-    this.alumnoSeleccionado = null;
+    this.alumnoSeleccionado = this.crearAlumnoVacio();
   }
 
-  guardarCambios() {
-   
+  guardarAlumno() {
+
+    const { id, codigoPersonal, primerNombre, primerApellido, ultimoGrado } = this.alumnoSeleccionado;
+
+    /**
+     * Validacion para campos obligatorios
+     */
+
+    if (!codigoPersonal || !primerNombre || !primerApellido || !ultimoGrado) {
+      Swal.fire({
+        icon: 'warning',
+        text: 'Verifique los campos obligatorios'
+      });
+      return;
+    }
+
+
+    if (!/^[A-Za-z]\d{3}[A-Za-z]{3}$/.test(codigoPersonal)) {
+      Swal.fire({
+        icon: 'warning',
+        text: 'El código personal debe tener el formato A123ABC'
+      });
+      return;
+    }
+
+    if (!this.alumnoSeleccionado.idEncargado) {
+      Swal.fire({
+        icon: 'warning',
+        text: 'Debe seleccionar a un encargado'
+      })
+    }
+
+    if (id) {
+
+      /**
+       * Si tiene ID se actualiza
+       */
+
+      this.alumnoService.actualizarAlumno(id, this.alumnoSeleccionado)
+        .subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              text: 'Alumno actualizado correctamente'
+            });
+            this.cargarAlumnos();
+            this.cerrarModal();
+          },
+          error: (e) => {
+            if (e.status === 409) {
+              Swal.fire({
+                icon: 'error',
+                text: 'El Codigo Personal ya está registrado'
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                text: 'Ocurrió un error inesperado'
+              });
+            }
+          }
+
+        });
+
+    } else {
+      this.alumnoService.crearAlumno(this.alumnoSeleccionado).subscribe({
+        next: () => {
+          Swal.fire({ icon: 'success', text: 'Alumno creado correctamente' });
+          this.cargarAlumnos();
+          this.cerrarModal();
+        },
+        error: (err) => {
+          if (err.status === 409) {
+            Swal.fire({
+              icon: 'warning',
+              text: 'El Código Personal ya está registrado'
+            });
+
+          } else if (err.status === 400) {
+            Swal.fire({
+              icon: 'warning',
+              text: err.error?.message || 'Debe seleccionar un encargado válido'
+            });
+
+          } else {
+            Swal.fire({
+              icon: 'error',
+              text: 'Ocurrió un error inesperado al guardar'
+            });
+          }
+        }
+
+      });
+    }
   }
+
+
 
 }
 

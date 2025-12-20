@@ -18,6 +18,7 @@ public class AlumnoMapper {
         alumno.setSegundoApellido(dto.getSegundoApellido());
         alumno.setEmail(dto.getEmail());
         alumno.setFechaNacimiento(dto.getFechaNacimiento());
+        alumno.setSexo(dto.getSexo());
         alumno.setUltimoGrado(dto.getUltimoGrado());
         alumno.setTelefono(dto.getTelefono());
         alumno.setEstado(dto.getEstado());
@@ -35,6 +36,8 @@ public class AlumnoMapper {
         dto.setTercerNombre(alumno.getTercerNombre());
         dto.setPrimerApellido(alumno.getPrimerApellido());
         dto.setSegundoApellido(alumno.getSegundoApellido());
+        dto.setSexo(alumno.getSexo());
+        dto.setTelefono(alumno.getTelefono());
         dto.setEstado(alumno.getEstado());
 
         if (alumno.getEncargado() != null) {

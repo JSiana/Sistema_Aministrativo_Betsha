@@ -34,6 +34,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EncargadoComponent } from './business/encargado/encargado.component';
 import { MatSelectModule } from '@angular/material/select';
+import { GruposComponent } from './business/grupos/grupos.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { MatSelectModule } from '@angular/material/select';
     ConfiguracionComponent,
     AlumnoFormComponent,
     UsersFormComponent,
-    EncargadoComponent
+    EncargadoComponent,
+    GruposComponent
   ],
   imports: [
     BrowserModule,

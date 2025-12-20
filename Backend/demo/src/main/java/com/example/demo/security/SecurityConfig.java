@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/usuarios/login").permitAll()
                         .requestMatchers("/api/usuarios").hasRole("ADMINISTRADOR")
                         .requestMatchers("/api/encargados/**").permitAll()
+                        .requestMatchers("/api/alumnos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

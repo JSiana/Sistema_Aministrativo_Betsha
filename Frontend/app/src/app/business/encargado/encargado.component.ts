@@ -71,67 +71,63 @@ export class EncargadoComponent {
     this.encargadoSeleccionado = this.crearEncargadoVacio();
   }
 
-guardarEncargado(): void {
-  const { id, dpi, nombres, apellidos, telefono, direccion } = this.encargadoSeleccionado;
+  guardarEncargado(): void {
+    const { id, dpi, nombres, apellidos, telefono, direccion } = this.encargadoSeleccionado;
 
-  // Validación de campos obligatorios
-  if (!dpi || !nombres || !apellidos || !telefono || !direccion) {
-    Swal.fire({ icon: 'warning', text: 'Todos los campos son obligatorios' });
-    return;
-  }
+    // Validación de campos obligatorios
+    if (!dpi || !nombres || !apellidos || !telefono || !direccion) {
+      Swal.fire({ icon: 'warning', text: 'Todos los campos son obligatorios' });
+      return;
+    }
     if (!/^\d{13}$/.test(dpi)) {
-    Swal.fire({ icon: 'warning', text: 'El DPI debe tener exactamente 13 dígitos' });
-    return;
-  }
+      Swal.fire({ icon: 'warning', text: 'El DPI debe tener exactamente 13 dígitos' });
+      return;
+    }
 
-  if (!/^\d{8}$/.test(telefono)) {
-    Swal.fire({ icon: 'warning', text: 'El teléfono debe tener exactamente 8 dígitos' });
-    return;
-  }
+    if (!/^\d{8}$/.test(telefono)) {
+      Swal.fire({ icon: 'warning', text: 'El teléfono debe tener exactamente 8 dígitos' });
+      return;
+    }
 
-  // 🔹 Aquí agregamos los console.log
- // console.log("Encargado a guardar:", this.encargadoSeleccionado);
-  // onsole.log("ID del encargado:", id);
-
-  if (id) {
-    // Si tiene ID → actualizar
-    this.encargadoService.actualizarEncargado(id, this.encargadoSeleccionado)
-      .subscribe({
-        next: () => {
-          Swal.fire({ icon: 'success', text: 'Encargado actualizado correctamente' });
-          this.cargarEncargados();
-          this.cerrarModal();
-        },
-        error: (e) => {
-          if (e.status === 409) {
-            Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
-          } else {
-            Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
+    if (id) {
+      // Si tiene ID → actualizar
+      this.encargadoService.actualizarEncargado(id, this.encargadoSeleccionado)
+        .subscribe({
+          next: () => {
+            Swal.fire({ icon: 'success', text: 'Encargado actualizado correctamente' });
+            this.cargarEncargados();
+            this.cerrarModal();
+          },
+          error: (e) => {
+            if (e.status === 409) {
+              Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
+            } else {
+              Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
+            }
           }
-        }
-      });
-  } else {
-    // Si NO tiene ID → crear
-    this.encargadoService.crearEncargado(this.encargadoSeleccionado)
-      .subscribe({
-        next: () => {
-          Swal.fire({ icon: 'success', text: 'Encargado creado correctamente' });
-          this.cargarEncargados();
-          this.cerrarModal();
-        },
-        error: (e) => {
-          if (e.status === 409) {
-            Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
-          } else {
-            Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
+        });
+    } else {
+      // Si NO tiene ID → crear
+      this.encargadoService.crearEncargado(this.encargadoSeleccionado)
+        .subscribe({
+          next: () => {
+            Swal.fire({ icon: 'success', text: 'Encargado creado correctamente' });
+            this.cargarEncargados();
+            this.cerrarModal();
+          },
+          error: (e) => {
+            if (e.status === 409) {
+              Swal.fire({ icon: 'error', text: 'El DPI ya está registrado' });
+            } else {
+              Swal.fire({ icon: 'error', text: 'Ocurrió un error inesperado' });
+            }
           }
-        }
-      });
+        });
+    }
   }
-}
 
 
-eliminarEncargado(id: number) {
+  eliminarEncargado(id: number) {
     // Confirmación antes de eliminar
     Swal.fire({
       title: '¿Estás seguro?',

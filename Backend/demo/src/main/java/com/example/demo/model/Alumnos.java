@@ -20,7 +20,7 @@ public class Alumnos {
     private Long id;
 
     // Codigo personal, para login de APP a futuro
-    @Column(name = "codigoPersonal", nullable = false, unique = false, length = 7)
+    @Column(name = "codigoPersonal", nullable = false, unique = true, length = 7)
     private String codigoPersonal;
 
     @Column(name = "primerNombre", nullable = false, length = 25)
@@ -29,7 +29,7 @@ public class Alumnos {
     @Column(name = "segundoNombre", nullable = true, length = 25)
     private String segundoNombre;
 
-    @Column(name = "tercerNomrbe", nullable = true, length = 25)
+    @Column(name = "tercerNombre", nullable = true, length = 25)
     private String tercerNombre;
 
     @Column(name = "primerApellido", nullable = false, length = 25)
@@ -43,6 +43,9 @@ public class Alumnos {
 
     @Column(name = "fechaNacimiento")
     private LocalDate fechaNacimiento;
+
+    @Column(name= "sexo", nullable = false)
+    private String sexo;
 
     @Column(name = "uGrado", nullable = false)
     private String ultimoGrado;

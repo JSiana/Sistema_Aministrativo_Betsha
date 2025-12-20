@@ -15,9 +15,11 @@
         <th>Codigo Personal</th>
         <th>Nombres</th>
         <th>Apellidos</th>
-
+        <th>Sexo</th>
         <th>Encargado</th>
+        <th>Telefono</th>
         <th>Estado</th>
+        
         <th></th>
 
       </tr>
@@ -32,12 +34,17 @@
           {{ alumno.segundoNombre || '' }}
           {{ alumno.tercerNombre || '' }}
         </td>
+
         <td>
           {{ alumno.primerApellido }}
           {{ alumno.segundoApellido || '' }}
         </td>
+        <td> {{alumno.sexo}}</td>
         <td>
           {{ alumno.nombreEncargado || '' }} {{ alumno.apellidoEncargado || '' }}
+        </td>
+        <td>
+          {{alumno.telefono}}
         </td>
         <td>
           <span [ngClass]="alumno.estado ? 'text-success' : 'text-danger'">
@@ -76,111 +83,126 @@
         <div class="row g-3">
           <!-- Código Personal -->
           <div class="col-md-6">
-            <label class="form-label">Código Personal</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.codigoPersonal"
-              [readonly]="!modoEdicion">
+            <label class="form-label">Código Personal *</label>
+            <input type="text" class="form-control" name="codigoPersonal"
+              [(ngModel)]="alumnoSeleccionado.codigoPersonal"
+              (ngModelChange)="alumnoSeleccionado.codigoPersonal = $event.toUpperCase()" [readonly]="!modoEdicion"
+              required>
           </div>
+        
 
-          <!-- Primer Nombre -->
-          <div class="col-md-6">
-            <label class="form-label">Primer Nombre</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.primerNombre"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Segundo Nombre -->
-          <div class="col-md-6">
-            <label class="form-label">Segundo Nombre</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.segundoNombre"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Tercer Nombre -->
-          <div class="col-md-6">
-            <label class="form-label">Tercer Nombre</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.tercerNombre"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Primer Apellido -->
-          <div class="col-md-6">
-            <label class="form-label">Primer Apellido</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.primerApellido"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Segundo Apellido -->
-          <div class="col-md-6">
-            <label class="form-label">Segundo Apellido</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.segundoApellido"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Email -->
-          <div class="col-md-6">
-            <label class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" [(ngModel)]="alumnoSeleccionado.email" [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Fecha Nacimiento -->
-          <div class="col-md-6">
-            <label class="form-label">Fecha de Nacimiento</label>
-            <input type="date" class="form-control" [(ngModel)]="alumnoSeleccionado.fechaNacimiento"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Último Grado -->
-          <div class="col-md-6">
-            <label class="form-label">Último Grado</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.ultimoGrado"
-              [readonly]="!modoEdicion">
-          </div>
-
-          <!-- Teléfono -->
-          <div class="col-md-6">
-            <label class="form-label">Teléfono</label>
-            <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.telefono" [readonly]="!modoEdicion">
-          </div>
-
-          <!-- ID Encargado -->
-          <div class="col-md-6">
-            <label for="encargado" class="form-label">Encargado</label>
-            
-              <select class="form-select" name="encargado" id="encargado" required
-                [(ngModel)]="encargadoSeleccionadoId" #encargado="ngModel">
-                <option [ngValue]="null" disabled selected>Seleccione un encargado</option>
-                <option *ngFor="let encargado of encargados" [ngValue]="encargado.id">
-                  {{encargado.nombres}} {{encargado.apellidos}}
-                </option>
-              </select>
-            
-            <div *ngIf="encargado.invalid && encargado.touched" class="text-danger">
-              El encargado es obligatorio
-            </div>
-          </div>
-
-          <!-- Estado 
-          <div class="col-md-6">
-            <label class="form-label">Estado</label>
-            <input type="text" class="form-control" [value]="alumnoSeleccionado.estado ? 'Activo' : 'Inactivo'"
-              readonly>
-          </div>
--->
-
+        <!-- Primer Nombre -->
+        <div class="col-md-6">
+          <label class="form-label">Primer Nombre *</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.primerNombre"
+            [readonly]="!modoEdicion" required>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button *ngIf="!modoEdicion" class="btn btn-primary" (click)="activarEdicion()">
-          Editar
-        </button>
-        <button *ngIf="modoEdicion" class="btn btn-success" (click)="guardarCambios()">
-          Guardar
-        </button>
-        <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+        <!-- Segundo Nombre -->
+        <div class="col-md-6">
+          <label class="form-label">Segundo Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.segundoNombre"
+            [readonly]="!modoEdicion">
+        </div>
+
+        <!-- Tercer Nombre -->
+        <div class="col-md-6">
+          <label class="form-label">Tercer Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.tercerNombre"
+            [readonly]="!modoEdicion">
+        </div>
+
+        <!-- Primer Apellido -->
+        <div class="col-md-6">
+          <label class="form-label">Primer Apellido *</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.primerApellido"
+            [readonly]="!modoEdicion" required>
+        </div>
+
+        <!-- Segundo Apellido -->
+        <div class="col-md-6">
+          <label class="form-label">Segundo Apellido</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.segundoApellido"
+            [readonly]="!modoEdicion">
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-6">
+          <label class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control" [(ngModel)]="alumnoSeleccionado.email" [readonly]="!modoEdicion">
+        </div>
+
+        <!-- Fecha Nacimiento -->
+        <div class="col-md-6">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input type="date" class="form-control" [(ngModel)]="alumnoSeleccionado.fechaNacimiento"
+            [readonly]="!modoEdicion">
+        </div>
+
+        <!-- Sexo -->
+        <div class="col-md-6">
+          <label class="form-label">Genero *</label>
+
+          <select class="form-select" name="sexo" id="sexo" [(ngModel)]="alumnoSeleccionado.sexo" #sexo="ngModel"
+            [disabled]="!modoEdicion" required>
+            <option [ngValue]="null" disabled>
+              Seleccione un género
+            </option>
+
+            <option [ngValue]="'Masculino'">Masculino</option>
+            <option [ngValue]="'Femenino'">Femenino</option>
+          </select>
+
+          <div *ngIf="sexo.invalid && sexo.touched" class="text-danger">
+            El género es obligatorio
+          </div>
+        </div>
+
+        <!-- Último Grado -->
+        <div class="col-md-6">
+          <label class="form-label">Último Grado *</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.ultimoGrado"
+            [readonly]="!modoEdicion" required>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="col-md-6">
+          <label class="form-label">Teléfono *</label>
+          <input type="text" class="form-control" [(ngModel)]="alumnoSeleccionado.telefono" [readonly]="!modoEdicion">
+        </div>
+
+        <!-- ID Encargado -->
+        <div class="col-md-6">
+          <label for="encargado" class="form-label">Encargado *</label>
+
+          <select class="form-select" name="encargado" id="encargado" required [disabled]="!modoEdicion"
+            [(ngModel)]="alumnoSeleccionado.idEncargado" #encargado="ngModel">
+            <option [ngValue]="null" disabled>Seleccione un encargado</option>
+            <option *ngFor="let encargado of encargados" [ngValue]="encargado.id">
+              {{encargado.nombres}} {{encargado.apellidos}}
+            </option>
+          </select>
+
+          <div *ngIf="encargado.invalid && encargado.touched" class="text-danger">
+            El encargado es obligatorio
+          </div>
+        </div>
+
+
       </div>
     </div>
+
+    <div class="modal-footer">
+      <button *ngIf="!modoEdicion" class="btn btn-success" (click)="activarEdicion()">
+        Editar
+      </button>
+      <button *ngIf="modoEdicion" class="btn btn-primary" (click)="guardarAlumno()">
+        Guardar
+      </button>
+      <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+    </div>
   </div>
+</div>
 
 
 </div>
