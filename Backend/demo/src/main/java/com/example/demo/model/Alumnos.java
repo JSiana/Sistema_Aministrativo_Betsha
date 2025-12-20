@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "alumnos")
@@ -65,6 +67,13 @@ public class Alumnos {
     private Boolean estado;
 
 
+    @ManyToMany
+    @JoinTable(
+            name = "alumno_grupo",
+            joinColumns = @JoinColumn(name = "alumno_id"),
+            inverseJoinColumns = @JoinColumn(name = "grupo_id")
+    )
+    private Set<Grupos> grupos = new HashSet<>();
 
 
 }
