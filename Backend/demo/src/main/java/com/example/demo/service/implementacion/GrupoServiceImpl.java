@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +29,7 @@ public class GrupoServiceImpl implements GrupoService {
     @Override
     public Grupos crearGrupo(GrupoDTO dto) {
 
-        if (grupoRepository.existsByCodigo(dto.getCodigo())) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "El código del grupo ya existe"
-            );
-        }
+
 
         Cursos curso = cursoRepository.findById(dto.getCursoId())
                 .orElseThrow(() -> new ResponseStatusException(
@@ -42,7 +38,19 @@ public class GrupoServiceImpl implements GrupoService {
                 ));
 
         Grupos grupo = new Grupos();
-        grupo.setCodigo(dto.getCodigo());
+
+        // GENERAR CÓDIGO AUTOMÁTICO
+        String codigoGenerado = generarCodigoGrupo();
+
+        // (Opcional pero recomendado)
+        if (grupoRepository.existsByCodigo(codigoGenerado)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Error al generar el código del grupo"
+            );
+        }
+
+        grupo.setCodigo(codigoGenerado);
         grupo.setCurso(curso);
         grupo.setJornada(dto.getJornada());
         grupo.setHorario(dto.getHorario());
@@ -56,6 +64,10 @@ public class GrupoServiceImpl implements GrupoService {
 
         List<Grupos> grupos = grupoRepository.findAll();
         List<GrupoResponseDTO> respuesta = new ArrayList<>();
+
+
+
+
 
         for (Grupos grupo : grupos) {
 
@@ -74,5 +86,24 @@ public class GrupoServiceImpl implements GrupoService {
         }
 
         return respuesta;
+    }
+
+
+    private String generarCodigoGrupo() {
+        String prefijo = "GRP";
+
+        // Año actual (2 dígitos)
+        String anio = String.valueOf(LocalDate.now().getYear()).substring(2);
+
+        String ultimoCodigo = grupoRepository.findLastCodigo();
+
+        int correlativo = 1;
+
+        if (ultimoCodigo != null) {
+            // GRP-2601 → 01
+            correlativo = Integer.parseInt(ultimoCodigo.substring(6)) + 1;
+        }
+
+        return prefijo + "-" + anio + String.format("%02d", correlativo);
     }
 }

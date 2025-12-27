@@ -1,19 +1,12 @@
 package com.example.demo.dto;
 
 public class GrupoDTO {
-    private String codigo;
+
     private Long cursoId;
     private String jornada;
     private String horario;
     private String dia;
 
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
 
     public Long getCursoId() {
         return cursoId;
