@@ -22,7 +22,7 @@ public class CursoInitializer implements CommandLineRunner {
                 "Tecnologías del Aprendizaje y la Comunicación I",
                 "Tecnologías del Aprendizaje y la Comunicación II",
                 "Tecnologías del Aprendizaje y la Comunicación III",
-                "Ténico Operador de Computadoras",
+                "Técnico Operador de Computadoras",
 
                 "Técnico Programador de Computadoras",
                 "Técnico en Mantenimiento y Reparación de Computadoras"

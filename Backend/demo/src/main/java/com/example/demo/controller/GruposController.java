@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.AlumnoResponseDTO;
 import com.example.demo.dto.GrupoDTO;
 import com.example.demo.dto.GrupoResponseDTO;
 import com.example.demo.model.Grupos;
@@ -32,4 +33,38 @@ public class GruposController {
         return ResponseEntity.ok(grupoService.listarGrupo());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<GrupoResponseDTO> obtenerPorId(@PathVariable Long id) {
+        GrupoResponseDTO grupo = grupoService.obtenerGrupoPorId(id);
+        return ResponseEntity.ok(grupo);
+    }
+
+    @PostMapping("/{grupoId}/alumnos/{alumnoId}")
+    public ResponseEntity<Void> asignarAlumno(
+            @PathVariable Long grupoId,
+            @PathVariable Long alumnoId) {
+
+        grupoService.asignarAlumno(grupoId, alumnoId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{grupoId}/alumnos/{alumnoId}")
+    public ResponseEntity<?> quitarAlumno(
+            @PathVariable Long grupoId,
+            @PathVariable Long alumnoId
+    ) {
+        grupoService.quitarAlumno(grupoId,alumnoId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{grupoId}/alumnos")
+    public List<AlumnoResponseDTO> listarAlumnosDelGrupo(@PathVariable Long grupoId) {
+        return grupoService.listarAlumnosDelGrupo(grupoId);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarGrupo(@PathVariable Long id){
+        grupoService.eliminarGrupo(id);
+        return ResponseEntity.noContent().build();
+    }
 }

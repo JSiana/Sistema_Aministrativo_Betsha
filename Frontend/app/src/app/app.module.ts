@@ -35,6 +35,10 @@ import { MatInputModule } from '@angular/material/input';
 import { EncargadoComponent } from './business/encargado/encargado.component';
 import { MatSelectModule } from '@angular/material/select';
 import { GruposComponent } from './business/grupos/grupos.component';
+import { InfoGrupoComponent } from './business/info-grupo/info-grupo.component';
+import { SpinnerInterceptor } from './interceptors/spinner.interceptor';
+import { SpinnerModule } from './components/spinner/spinner.module';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +61,8 @@ import { GruposComponent } from './business/grupos/grupos.component';
     AlumnoFormComponent,
     UsersFormComponent,
     EncargadoComponent,
-    GruposComponent
+    GruposComponent,
+    InfoGrupoComponent
   ],
   imports: [
     BrowserModule,
@@ -72,14 +77,20 @@ import { GruposComponent } from './business/grupos/grupos.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    SpinnerModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: SpinnerInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
 
   ],
   bootstrap: [AppComponent]

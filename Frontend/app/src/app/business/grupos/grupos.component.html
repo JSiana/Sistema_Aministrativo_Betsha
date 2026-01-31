@@ -19,7 +19,7 @@
             </tr>
         </thead>
 
-        <tbody>
+        <tbody *ngIf="grupos.length > 0; else sinGrupos">
             <tr *ngFor="let grupo of grupos">
                 <td>{{ grupo.id }}</td>
                 <td>{{ grupo.codigo }}</td>
@@ -29,13 +29,22 @@
                 <td>{{ grupo.dia }}</td>
                 <td>{{ grupo.cantidadAlumnos }}</td>
                 <td>
-                    <button class="btn btn-sm btn-info me-1">Ver</button>
-                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                    <button class="btn btn-sm btn-warning me-1" [routerLink]="['/grupos/info-grupo', grupo.id]">Ver
+                        Grupo</button>
+                    <button class="btn btn-sm btn-info me-1">Editar</button>
+                    <button class="btn btn-sm btn-danger" (click)="eliminarGrupo(grupo)">Eliminar</button>
                 </td>
             </tr>
         </tbody>
+        <ng-template #sinGrupos>
+            <tr>
+                <td colspan="9" class="text-center text-muted py-3">
+                    No hay grupos creados
+                </td>
+            </tr>
+        </ng-template>
     </table>
-</div>
+</div>  
 
 
 <!-- Backdrop-->
@@ -76,7 +85,8 @@
                     <div class="col-md-6">
                         <label class="form-label">Jornada</label>
                         <select class="form-select" [(ngModel)]="grupoSeleccionado.jornada" name="jornada" required
-                            [disabled]="!modoEdicion">
+                            [disabled]="!modoEdicion" (change)="onJornadaChange()">
+
 
                             <option value="" disabled>Seleccione una jornada</option>
                             <option value="Matutina">Matutina</option>
@@ -100,7 +110,7 @@
                                 </option>
                             </select>
 
-                            <span class="align-self-center fw-bold">a</span>
+                            <label class="align-self-center">a</label>
 
                             <!-- Hora fin -->
                             <select class="form-select" [(ngModel)]="horaFin" name="horaFin" required
@@ -131,7 +141,7 @@
 
                     <div class="modal-footer">
                         <button *ngIf="!modoEdicion" class="btn btn-success"> Editar</button>
-                        <button *ngIf="modoEdicion" class="btn btn-primary">Guardar</button>
+                        <button *ngIf="modoEdicion" class="btn btn-primary" (click)="guardarGrupo()">Guardar</button>
                         <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
                     </div>
 

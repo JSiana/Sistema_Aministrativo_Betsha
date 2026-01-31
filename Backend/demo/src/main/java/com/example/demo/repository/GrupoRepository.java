@@ -8,7 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 public interface GrupoRepository extends JpaRepository<Grupos, Long> {
     boolean existsByCodigo(String codigo);
 
-    @Query("SELECT g.codigo FROM Grupos g ORDER BY g.id DESC LIMIT 1")
+    @Query(value = """
+        SELECT codigo
+        FROM grupos
+        WHERE codigo LIKE CONCAT('GRP-', YEAR(CURDATE()) % 100, '%')
+        ORDER BY codigo DESC
+        LIMIT 1
+    """, nativeQuery = true)
     String findLastCodigo();
+
 
 }

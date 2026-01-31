@@ -10,7 +10,7 @@ export interface GrupoResponse {
 
 export interface GrupoDTO {
     id?: number;
-    cursoId: number;
+    cursoId: number | null;
     jornada: string;
     horario: string;
     dia: string;

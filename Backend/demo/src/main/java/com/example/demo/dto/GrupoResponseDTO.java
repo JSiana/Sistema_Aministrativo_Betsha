@@ -10,6 +10,19 @@ public class GrupoResponseDTO {
     private String dia;
     private int cantidadAlumnos;
 
+    public GrupoResponseDTO() {
+
+    }
+
+    public GrupoResponseDTO(Long id, String codigo, String curso, String jornada, String horario, String dia, int cantidadAlumnos) {
+        this.id = id;
+        this.codigo = codigo;
+        this.curso = curso;
+        this.jornada = jornada;
+        this.horario = horario;
+        this.dia = dia;
+        this.cantidadAlumnos = cantidadAlumnos;
+    }
 
     public Long getId() {
         return id;

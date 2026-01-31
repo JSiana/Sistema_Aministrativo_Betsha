@@ -18,7 +18,7 @@ export class GruposComponent implements OnInit {
 
   private crearGrupoVacio(): GrupoDTO {
     return {
-      cursoId: 0,
+      cursoId: null,
       jornada: '',
       horario: '',
       dia: '',
@@ -139,16 +139,89 @@ export class GruposComponent implements OnInit {
 
 
   guardarGrupo() {
+    if (!this.grupoSeleccionado.cursoId || this.grupoSeleccionado.cursoId === 0) {
+      Swal.fire('Error', 'Debe seleccionar un curso', 'error');
+      return;
+    }
+    if (!this.grupoSeleccionado.jornada) {
+      Swal.fire('Error', 'Debe seleccionar una jornada', 'error');
+      return;
+    }
+
     if (!this.horarioValido()) {
       Swal.fire('Error', 'Horario inválido', 'error');
+      return;
+    }
+
+    if (!this.grupoSeleccionado.dia || this.grupoSeleccionado.dia.length === 0) {
+      Swal.fire('Error', 'Debe seleccionar al menos un día', 'error');
       return;
     }
 
     this.grupoSeleccionado.horario =
       `${this.horaInicio} - ${this.horaFin}`;
 
-    // aquí llamas al servicio para guardar
+    this.grupoService.crearGrupo(this.grupoSeleccionado).subscribe({
+      next: () => {
+        Swal.fire('Éxito', 'Grupo creado correctamente', 'success');
+        this.cerrarModal();
+        this.cargarGrupos();
+      },
+      error: (err) => {
+        if (err.status === 400) {
+          Swal.fire('Error', err.error?.message || 'Datos inválidos', 'error');
+        } else if (err.status === 409) {
+          Swal.fire('Error', err.error?.message || 'Código duplicado', 'error');
+        } else {
+          Swal.fire('Error', 'Ocurrió un error inesperado', 'error');
+        }
+      }
+    });
+
+
   }
+
+
+  async eliminarGrupo(grupo: GrupoResponse): Promise<void>{
+    if(!grupo.id) return;
+
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Seguro que quieres eliminar el grupo ${grupo.codigo}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    });
+
+    if(result.isConfirmed){
+      this.grupoService.eliminarGrupo(grupo.id).subscribe({
+        next: () => {
+          this.cargarGrupos();
+          Swal.fire({
+            icon: 'success',
+            text: 'Grupo eliminado correctamente'
+          })
+        },
+        error: (err) => {
+          if (err.status === 409){
+            Swal.fire({
+              icon: 'warning',
+              text: err.error?.message || 'Debe eliminar los alumnos del grupo antes'
+            });
+          } else{
+            Swal.fire({
+              icon: 'error',
+              text: 'Ocurrió un error inesperado'
+            })
+          }
+        }
+      })
+    }
+
+  }
+
 
 
 }

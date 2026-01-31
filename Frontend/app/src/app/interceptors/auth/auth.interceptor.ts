@@ -24,4 +24,8 @@ export class AuthInterceptor implements HttpInterceptor {
     // Sin token → deja pasar; backend responderá 401/403 si es protegido
     return next.handle(req);
   }
+
+
+
+
 }
