@@ -8,19 +8,21 @@ public class GrupoResponseDTO {
     private String jornada;
     private String horario;
     private String dia;
+    private String cicloEscolar;
     private int cantidadAlumnos;
 
     public GrupoResponseDTO() {
 
     }
 
-    public GrupoResponseDTO(Long id, String codigo, String curso, String jornada, String horario, String dia, int cantidadAlumnos) {
+    public GrupoResponseDTO(Long id, String codigo, String curso, String jornada, String horario, String dia, String cicloEscolar, int cantidadAlumnos) {
         this.id = id;
         this.codigo = codigo;
         this.curso = curso;
         this.jornada = jornada;
         this.horario = horario;
         this.dia = dia;
+        this.cicloEscolar = cicloEscolar;
         this.cantidadAlumnos = cantidadAlumnos;
     }
 
@@ -70,6 +72,14 @@ public class GrupoResponseDTO {
 
     public void setDia(String dia) {
         this.dia = dia;
+    }
+
+    public String getCicloEscolar() {
+        return cicloEscolar;
+    }
+
+    public void setCicloEscolar(String cicloEscolar) {
+        this.cicloEscolar = cicloEscolar;
     }
 
     public int getCantidadAlumnos() {

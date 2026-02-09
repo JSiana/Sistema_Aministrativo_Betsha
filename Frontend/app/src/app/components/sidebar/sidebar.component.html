@@ -1,86 +1,92 @@
-
 <div class="notificacion">
-    <button type="button" class="btn btn-light position-relative ">
-        <i class="bi bi-bell-fill fs-5"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          3
-        </span>
-      </button>
-      
-    </div>
+  <button type="button" class="btn btn-light position-relative ">
+    <i class="bi bi-bell-fill fs-5"></i>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      3
+    </span>
+  </button>
+
+</div>
 <div class="sid">
 
-    
-    
-    <ul class="nav flex-column text-dark">
-  
-      <!-- Dashboard -->
-      <li class="nav-item">
-        <a routerLink="/dashboard" class="nav-link text-dark">
-          <i class="bi bi-speedometer2 me-2"></i> Dashboard
-        </a>
-      </li>
-  
-      <!-- Grupos-->
-       <li class="nav-item">
-        <a routerLink="/grupos" class="nav-link text-dark">
-          <i class="bi bi-people me-2"></i> Grupos
-        </a>
-       </li>
-
-      <!-- registros-->
-      <li>
-        <a (click)="toggleSubmenu('registros')" class="nav-link text-dark" role="button">
-          <i class="bi bi-wrench me-2"></i> Registros
-        </a>
-        <ul class="nav flex-column ms-3" [@submenuToggle]="getState('registros')">
-          <li><a routerLink="/alumnos" class="nav-link text-dark">Registro de alumnos</a></li>
-          <li><a routerLink="/encargado" class="nav-link text-dark">Registro de encargados</a></li>
-          
-        </ul>
-      </li>
-  
-      <!-- Seguridad -->
-      <li>
-        <a (click)="toggleSubmenu('seguridad')" class="nav-link text-dark" role="button">
-          <i class="bi bi-shield-lock me-2"></i> Seguridad
-        </a>
-        <ul class="nav flex-column ms-3" [@submenuToggle]="getState('seguridad')">
-          <li><a routerLink="/users" class="nav-link text-dark">Registro de usuarios</a></li>
-          <li><a routerLink="/roles" class="nav-link text-dark">Registro de roles</a></li>
-        </ul>
-      </li>
-  
-      <!-- Operaciones -->
-      <li>
-        <a (click)="toggleSubmenu('operaciones')" class="nav-link text-dark" role="button">
-          <i class="bi bi-cash-coin me-2"></i> Operaciones
-        </a>
-        <ul class="nav flex-column ms-3" [@submenuToggle]="getState('operaciones')">
-          <li><a routerLink="/pagos" class="nav-link text-dark">Registro de pagos</a></li>
-          <li><a routerLink="/calificaciones" class="nav-link text-dark">Registro de notas</a></li>
-        </ul>
-      </li>
-  
-      <!-- Reportes -->
-      <li>
-        <a (click)="toggleSubmenu('reportes')" class="nav-link text-dark" role="button">
-          <i class="bi bi-bar-chart me-2"></i> Reportes
-        </a>
-        <ul class="nav flex-column ms-3" [@submenuToggle]="getState('reportes')">
-          <li><a routerLink="/reportes" class="nav-link text-dark">Listado de reportes</a></li>
-          <li><a routerLink="/cierre" class="nav-link text-dark">Cierre mensual</a></li>
-        </ul>
-      </li>
-  
-      <li class="nav-item">
-        <a routerLink="/configuracion" class="nav-link text-dark">
-          <i class="bi bi-speedometer2 me-2"></i> Configuracion
-        </a>
-      </li>
-      
 
 
-    </ul>
+  <ul class="nav flex-column text-dark">
+
+    <!-- Dashboard -->
+    <li class="nav-item">
+      <a routerLink="/dashboard" class="nav-link text-dark">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+      </a>
+    </li>
+
+    <!-- Grupos-->
+
+    <li>
+      <a (click)="toggleSubmenu('grupos')" class="nav-link text-dark" role="button">
+        <i class="bi bi-people me-2"></i> Grupos
+      </a>
+      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('grupos')">
+        <li><a routerLink="/grupos" class="nav-link text-dark">Grupos activos</a></li>
+        <li><a href="#" class="nav-link text-dark">Asistencia de grupos</a></li>
+      </ul>
+
+
+    </li>
+
+
+    <!-- registros-->
+    <li>
+      <a (click)="toggleSubmenu('registros')" class="nav-link text-dark" role="button">
+        <i class="bi bi-wrench me-2"></i> Registros
+      </a>
+      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('registros')">
+        <li><a routerLink="/alumnos" class="nav-link text-dark">Registro de alumnos</a></li>
+        <li><a routerLink="/encargado" class="nav-link text-dark">Registro de encargados</a></li>
+
+      </ul>
+    </li>
+
+    <!-- Seguridad -->
+    <li>
+      <a (click)="toggleSubmenu('seguridad')" class="nav-link text-dark" role="button">
+        <i class="bi bi-shield-lock me-2"></i> Seguridad
+      </a>
+      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('seguridad')">
+        <li><a routerLink="/users" class="nav-link text-dark">Registro de usuarios</a></li>
+        <li><a routerLink="/roles" class="nav-link text-dark">Registro de roles</a></li>
+      </ul>
+    </li>
+
+    <!-- Operaciones -->
+    <li>
+      <a (click)="toggleSubmenu('operaciones')" class="nav-link text-dark" role="button">
+        <i class="bi bi-cash-coin me-2"></i> Operaciones
+      </a>
+      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('operaciones')">
+        <li><a routerLink="/pagos" class="nav-link text-dark">Registro de pagos</a></li>
+        <li><a routerLink="/calificaciones" class="nav-link text-dark">Registro de notas</a></li>
+      </ul>
+    </li>
+
+    <!-- Reportes -->
+    <li>
+      <a (click)="toggleSubmenu('reportes')" class="nav-link text-dark" role="button">
+        <i class="bi bi-bar-chart me-2"></i> Reportes
+      </a>
+      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('reportes')">
+        <li><a routerLink="/reportes" class="nav-link text-dark">Listado de reportes</a></li>
+        <li><a routerLink="/cierre" class="nav-link text-dark">Cierre mensual</a></li>
+      </ul>
+    </li>
+
+    <li class="nav-item">
+      <a routerLink="/configuracion" class="nav-link text-dark">
+        <i class="bi bi-speedometer2 me-2"></i> Configuracion
+      </a>
+    </li>
+
+
+
+  </ul>
 </div>
-  

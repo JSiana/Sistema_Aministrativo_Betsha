@@ -5,6 +5,7 @@ export interface GrupoResponse {
     jornada: string;
     horario: string;
     dia: string;
+    cicloEscolar: string;
     cantidadAlumnos: number;
 }
 
@@ -14,6 +15,7 @@ export interface GrupoDTO {
     jornada: string;
     horario: string;
     dia: string;
+    cicloEscolar: string;
 }
 
 

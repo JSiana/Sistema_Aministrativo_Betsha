@@ -11,15 +11,11 @@ public interface GrupoService {
 
     Grupos crearGrupo (GrupoDTO dto);
 
-    List<GrupoResponseDTO> listarGrupo();
+
+    List<GrupoResponseDTO> listarPorCiclo(String cicloEscolar);
 
     GrupoResponseDTO obtenerGrupoPorId(Long id);
 
-    void asignarAlumno(Long grupoId, Long alumnoId);
-
-    void quitarAlumno(Long grupoId, Long alumnoID);
-
-    List<AlumnoResponseDTO> listarAlumnosDelGrupo(Long grupoId);
 
     void eliminarGrupo(Long id);
 }

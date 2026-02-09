@@ -32,10 +32,13 @@ public class Grupos {
     private String dia;
 
     @Column(nullable = false)
+    private String cicloEscolar;
+
+    @Column(nullable = false)
     private Boolean estado = true;
 
-    @ManyToMany(mappedBy = "grupos")
-    private Set<Alumnos> alumnos = new HashSet<>();
+    @OneToMany(mappedBy = "grupo")
+    private Set<AlumnoGrupo> alumnoGrupos = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -85,6 +88,14 @@ public class Grupos {
         this.dia = dia;
     }
 
+    public String getCicloEscolar() {
+        return cicloEscolar;
+    }
+
+    public void setCicloEscolar(String cicloEscolar) {
+        this.cicloEscolar = cicloEscolar;
+    }
+
     public Boolean getEstado() {
         return estado;
     }
@@ -93,11 +104,11 @@ public class Grupos {
         this.estado = estado;
     }
 
-    public Set<Alumnos> getAlumnos() {
-        return alumnos;
+    public Set<AlumnoGrupo> getAlumnoGrupos() {
+        return alumnoGrupos;
     }
 
-    public void setAlumnos(Set<Alumnos> alumnos) {
-        this.alumnos = alumnos;
+    public void setAlumnoGrupos(Set<AlumnoGrupo> alumnoGrupos) {
+        this.alumnoGrupos = alumnoGrupos;
     }
 }

@@ -67,13 +67,8 @@ public class Alumnos {
     private Boolean estado;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "alumno_grupo",
-            joinColumns = @JoinColumn(name = "alumno_id"),
-            inverseJoinColumns = @JoinColumn(name = "grupo_id")
-    )
-    private Set<Grupos> grupos = new HashSet<>();
+    @OneToMany(mappedBy = "alumno")
+    private Set<AlumnoGrupo> alumnoGrupos = new HashSet<>();
 
 
 }

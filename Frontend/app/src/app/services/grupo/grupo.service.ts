@@ -14,9 +14,11 @@ export class GrupoService {
 
   constructor(private http: HttpClient) { }
 
-  listarGrupos(): Observable<GrupoResponse[]> {
-    return this.http.get<GrupoResponse[]>(this.apiUrl);
-  }
+  listarGruposPorCiclo(ciclo: string): Observable<GrupoResponse[]> {
+  return this.http.get<GrupoResponse[]>(
+    `${this.apiUrl}/ciclo/${ciclo}`
+  );
+}
 
 
   obtenerGrupoPorId(id: number): Observable<GrupoResponse> {

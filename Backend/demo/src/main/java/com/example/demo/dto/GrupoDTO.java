@@ -6,6 +6,9 @@ public class GrupoDTO {
     private String jornada;
     private String horario;
     private String dia;
+    private String cicloEscolar;
+
+
 
 
     public Long getCursoId() {
@@ -38,5 +41,13 @@ public class GrupoDTO {
 
     public void setDia(String dia) {
         this.dia = dia;
+    }
+
+    public String getCicloEscolar() {
+        return cicloEscolar;
+    }
+
+    public void setCicloEscolar(String cicloEscolar) {
+        this.cicloEscolar = cicloEscolar;
     }
 }

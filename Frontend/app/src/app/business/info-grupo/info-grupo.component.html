@@ -11,37 +11,33 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-4">
-                            <strong>CODIGO:</strong> {{grupo.codigo}}
+                            <strong>CODIGO: </strong> {{grupo.codigo}}
                         </div>
                         <div class="col-md-3 mb-4">
-                            <strong>GURSO:</strong> {{grupo.curso}}
+                            <strong>GURSO: </strong> {{grupo.curso}}
                         </div>
                         <div class="col-md-3 mb-4">
-                            <strong>JORNADA:</strong> {{grupo.jornada}}
+                            <strong>JORNADA: </strong> {{grupo.jornada}}
                         </div>
                         <div class="col-md-3 mb-2">
-                            <strong>HORARIO:</strong> {{grupo.horario}}
+                            <strong>HORARIO: </strong> {{grupo.horario}}
                         </div>
 
                         <div class="col-md-3 mb-2">
-                            <strong>DÍA:</strong>{{grupo.dia}}
+                            <strong>DÍA: </strong>{{grupo.dia}}
                         </div>
                         <div class="col-md-3 mb-2">
-                            <strong>JORNADA:</strong> {{grupo.jornada}}
+                            <strong>JORNADA: </strong> {{grupo.jornada}}
                         </div>
-                        <div class="col-md-2 mb-2">
-                            <strong>ALUMNOS ASIGNADOS:</strong> {{grupo.cantidadAlumnos}}
+                        <div class="col-md-3 mb-2">
+                            <strong>ALUMNOS ASIGNADOS: </strong> {{grupo.cantidadAlumnos}}
                         </div>
-                        <div class="col-md-2 mb-2">
-                            <strong>ESTADO:</strong>
+                        <div class="col-md-3 mb-2">
+                            <strong>ESTADO: </strong>
                             <span class="badge bg-success">Activo</span>
 
                         </div>
-                        <div class="col-md-2 mb-2">
-                            <button class="btn btn-primary" (click)="abrirModalAsignar()">
-                                <i class="bi bi-plus-circle"></i> Asignar alumno
-                            </button>
-                        </div>
+
                     </div>
                 </div>
 
@@ -49,6 +45,7 @@
 
         </div>
     </header>
+
 
     <!-- MAIN -->
     <main class="flex-grow-1 d-flex flex-column bg-light mt-3 mb-3 ">
@@ -76,23 +73,25 @@
                                 </tr>
                             </thead>
                             <tbody *ngIf="alumnosAsignados.length > 0; else sinAlumnos">
-                                <tr *ngFor="let alumno of alumnosAsignados; let i = index">
+                                <tr *ngFor="let asignacion of alumnosAsignados; let i = index">
                                     <td class="text-center">{{ i + 1 }}</td>
-                                    <td class="text-center">{{ alumno.codigoPersonal }}</td>
+
+                                    <td class="text-center">{{ asignacion.alumno.codigoPersonal }}</td>
                                     <td>
-                                        {{ alumno.primerNombre }}
-                                        {{ alumno.segundoNombre ?? '' }}
-                                        {{ alumno.tercerNombre ?? '' }}
-                                        {{ alumno.primerApellido }}
-                                        {{ alumno.segundoApellido ?? '' }}
+                                        {{ asignacion.alumno.primerNombre }}
+                                        {{ asignacion.alumno.primerApellido }}
                                     </td>
+
                                     <td class="text-center">—</td>
                                     <td class="text-center">—</td>
                                     <td class="text-center">—</td>
                                     <td class="text-center">—</td>
                                     <td class="text-center">—</td>
                                     <td>
-                                        <button class="btn btn-danger btn-sm" (click)="quitarAlumno(alumno.id)">Eliminar</button>
+                                        <button class="btn btn-danger btn-sm"
+                                            (click)="quitarAlumno(asignacion.alumno.id)">
+                                            Eliminar
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -118,6 +117,11 @@
         <div class="container-fluid">
             <div class="container">
                 <div class="card-body d-flex justify-content-center gap-2">
+
+                    <button class="btn btn-primary" (click)="abrirModalAsignar()">
+                        <i class="bi bi-plus-circle"></i> Asignar alumno
+                    </button>
+
                     <button class="btn btn-dark">
                         <i class="bi bi-check2-square"></i> Asitencia
                     </button>

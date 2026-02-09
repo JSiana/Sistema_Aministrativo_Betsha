@@ -5,6 +5,8 @@ import com.example.demo.model.Grupos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface GrupoRepository extends JpaRepository<Grupos, Long> {
     boolean existsByCodigo(String codigo);
 
@@ -16,6 +18,8 @@ public interface GrupoRepository extends JpaRepository<Grupos, Long> {
         LIMIT 1
     """, nativeQuery = true)
     String findLastCodigo();
+
+    List<Grupos> findByCicloEscolar(String cicloEscolar);
 
 
 }

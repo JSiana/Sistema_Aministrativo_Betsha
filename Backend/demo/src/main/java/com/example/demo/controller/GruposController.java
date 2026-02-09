@@ -20,17 +20,19 @@ public class GruposController {
     @Autowired
     private GrupoService grupoService;
 
-    // 🔹 Crear grupo
+    // Crear grupo
     @PostMapping
     public ResponseEntity<Grupos> crearGrupo(@RequestBody GrupoDTO dto) {
         Grupos grupo = grupoService.crearGrupo(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(grupo);
     }
 
-    // 🔹 Listar grupos
-    @GetMapping
-    public ResponseEntity<List<GrupoResponseDTO>> listarGrupos() {
-        return ResponseEntity.ok(grupoService.listarGrupo());
+    // Listar grupos por ciclo escolar
+    @GetMapping("/ciclo/{cicloEscolar}")
+    public ResponseEntity<List<GrupoResponseDTO>> listarGruposPorCiclo(
+            @PathVariable String cicloEscolar
+    ) {
+        return ResponseEntity.ok(grupoService.listarPorCiclo(cicloEscolar));
     }
 
     @GetMapping("/{id}")
@@ -39,28 +41,6 @@ public class GruposController {
         return ResponseEntity.ok(grupo);
     }
 
-    @PostMapping("/{grupoId}/alumnos/{alumnoId}")
-    public ResponseEntity<Void> asignarAlumno(
-            @PathVariable Long grupoId,
-            @PathVariable Long alumnoId) {
-
-        grupoService.asignarAlumno(grupoId, alumnoId);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{grupoId}/alumnos/{alumnoId}")
-    public ResponseEntity<?> quitarAlumno(
-            @PathVariable Long grupoId,
-            @PathVariable Long alumnoId
-    ) {
-        grupoService.quitarAlumno(grupoId,alumnoId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{grupoId}/alumnos")
-    public List<AlumnoResponseDTO> listarAlumnosDelGrupo(@PathVariable Long grupoId) {
-        return grupoService.listarAlumnosDelGrupo(grupoId);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarGrupo(@PathVariable Long id){

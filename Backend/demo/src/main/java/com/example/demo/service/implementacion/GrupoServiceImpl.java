@@ -6,6 +6,7 @@ import com.example.demo.dto.GrupoResponseDTO;
 import com.example.demo.model.Alumnos;
 import com.example.demo.model.Cursos;
 import com.example.demo.model.Grupos;
+import com.example.demo.repository.AlumnoGrupoRepository;
 import com.example.demo.repository.AlumnoRepository;
 import com.example.demo.repository.CursoRepository;
 import com.example.demo.repository.GrupoRepository;
@@ -36,6 +37,9 @@ public class GrupoServiceImpl implements GrupoService {
     @Autowired
     private AlumnoRepository alumnoRepository;
 
+    @Autowired
+    private AlumnoGrupoRepository alumnoGrupoRepository;
+
     @Override
     public Grupos crearGrupo(GrupoDTO dto) {
 
@@ -65,19 +69,16 @@ public class GrupoServiceImpl implements GrupoService {
         grupo.setJornada(dto.getJornada());
         grupo.setHorario(dto.getHorario());
         grupo.setDia(dto.getDia());
+        grupo.setCicloEscolar(dto.getCicloEscolar());
 
         return grupoRepository.save(grupo);
     }
 
     @Override
-    public List<GrupoResponseDTO> listarGrupo() {
+    public List<GrupoResponseDTO> listarPorCiclo(String cicloEscolar) {
 
-        List<Grupos> grupos = grupoRepository.findAll();
+        List<Grupos> grupos = grupoRepository.findByCicloEscolar(cicloEscolar);
         List<GrupoResponseDTO> respuesta = new ArrayList<>();
-
-
-
-
 
         for (Grupos grupo : grupos) {
 
@@ -88,9 +89,11 @@ public class GrupoServiceImpl implements GrupoService {
             dto.setJornada(grupo.getJornada());
             dto.setHorario(grupo.getHorario());
             dto.setDia(grupo.getDia());
-            dto.setCantidadAlumnos(
-                    grupo.getAlumnos() != null ? grupo.getAlumnos().size() : 0
-            );
+            dto.setCicloEscolar(grupo.getCicloEscolar());
+
+            // Contar alumnos usando AlumnoGrupo
+            int cantidadAlumnos = alumnoGrupoRepository.countByGrupoId(grupo.getId());
+            dto.setCantidadAlumnos(cantidadAlumnos);
 
             respuesta.add(dto);
         }
@@ -121,6 +124,8 @@ public class GrupoServiceImpl implements GrupoService {
                         HttpStatus.NOT_FOUND, "Grupo no encontrado"
                 ));
 
+        int cantidadAlumnos = alumnoGrupoRepository.countByGrupoId(grupo.getId());
+
         return new GrupoResponseDTO(
                 grupo.getId(),
                 grupo.getCodigo(),
@@ -128,108 +133,28 @@ public class GrupoServiceImpl implements GrupoService {
                 grupo.getJornada(),
                 grupo.getHorario(),
                 grupo.getDia(),
-                grupo.getAlumnos() != null ? grupo.getAlumnos().size() : 0
+                grupo.getCicloEscolar(),
+                cantidadAlumnos
         );
     }
 
 
     @Override
-    public void asignarAlumno(Long grupoId, Long alumnoId){
-        Grupos grupo = grupoRepository.findById(grupoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Grupo no encontrado"
-                ));
-
-        Alumnos alumno = alumnoRepository.findById(alumnoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Alumno no encontrado"
-                ));
-
-
-        if (alumno.getGrupos().contains(grupo)){
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, "El alumno ya está asignado a este grupo"
-            );
-
-
-        }
-        alumno.getGrupos().add(grupo);
-        grupo.getAlumnos().add(alumno);
-
-
-        grupoRepository.save(grupo);
-    }
-
-    @Override
-    public List<AlumnoResponseDTO> listarAlumnosDelGrupo(Long grupoId) {
-
-        Grupos grupo = grupoRepository.findById(grupoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Grupo no encontrado"));
-
-        return grupo.getAlumnos().stream()
-                .map(AlumnoResponseDTO::new)
-                .toList();
-    }
-
-
-    @Override
-    public void quitarAlumno(Long grupoId, Long alumnoId){
-        Grupos grupo = grupoRepository.findById(grupoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Grupo no encontrado"
-                ));
-
-        Alumnos alumno = alumnoRepository.findById(alumnoId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Alumno no encontrado"
-                ));
-
-        /**
-         * Validar que el alumno si este asignado al grupo
-         */
-
-        if (!alumno.getGrupos().contains(grupo)){
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, "EL alumno no está asignado a este grupo"
-            );
-        }
-
-        /**
-         * Quitar relación
-         */
-
-        alumno.getGrupos().remove(grupo);
-        grupo.getAlumnos().remove(alumno);
-
-        /**
-         * Guardar cambios
-         */
-
-        grupoRepository.save(grupo);
-
-
-    }
-
-    @Override
-    public void eliminarGrupo(Long id){
+    public void eliminarGrupo(Long id) {
         Grupos grupo = grupoRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, "Grupo no encontrado"
-                        ));
-        /**
-         * Validar si tiene alumnos asignados
-         */
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Grupo no encontrado"
+                ));
 
-        if (!grupo.getAlumnos().isEmpty()){
+        // Validar si tiene alumnos asignados usando AlumnoGrupo
+        if (alumnoGrupoRepository.existsByGrupoId(grupo.getId())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     "No se puede eliminar el grupo porque tiene alumnos asignados. Elimine primero a los alumnos"
             );
         }
+
         grupoRepository.deleteById(id);
     }
-
 
 }

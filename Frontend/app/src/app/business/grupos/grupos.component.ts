@@ -3,6 +3,7 @@ import { GrupoService } from '../../services/grupo/grupo.service';
 import { GrupoDTO, GrupoResponse } from '../../models/grupo';
 import { CursoService } from '../../services/curso/curso.service';
 import Swal from 'sweetalert2';
+import { CicloService } from '../../services/ciclo/ciclo.service';
 
 @Component({
   selector: 'app-grupos',
@@ -15,6 +16,7 @@ export class GruposComponent implements OnInit {
   mostrarModal: boolean = false;
   modoEdicion: boolean = false;
   grupoSeleccionado: GrupoDTO = this.crearGrupoVacio();
+  cicloActivo!: string;
 
   private crearGrupoVacio(): GrupoDTO {
     return {
@@ -22,6 +24,7 @@ export class GruposComponent implements OnInit {
       jornada: '',
       horario: '',
       dia: '',
+      cicloEscolar: '',
     }
   }
 
@@ -29,6 +32,9 @@ export class GruposComponent implements OnInit {
   abrirModalNuevo() {
     this.mostrarModal = true;
     this.modoEdicion = true;
+    this.grupoSeleccionado = this.crearGrupoVacio();
+    this.grupoSeleccionado.cicloEscolar = this.cicloActivo;
+
   }
 
   cerrarModal() {
@@ -52,12 +58,15 @@ export class GruposComponent implements OnInit {
     'Sábado',
     'Domingo'
   ];
+  ciclos: string[] = [];
+
   diasSeleccionados: string[] = [];
 
 
   constructor(
     private grupoService: GrupoService,
-    private cursoService: CursoService
+    private cursoService: CursoService,
+    private cicloService: CicloService
   ) {
 
   }
@@ -65,6 +74,20 @@ export class GruposComponent implements OnInit {
   ngOnInit(): void {
     this.generarHoras();
     this.cargarCursos();
+
+    // obtener ciclo activo
+    this.cicloActivo = this.cicloService.getCicloActivo();
+
+    // generar ciclos disponibles
+    const anioActual = new Date().getFullYear();
+    this.ciclos = [];
+
+    for (let i = anioActual - 1; i <= anioActual + 3; i++) {
+      this.ciclos.push(i.toString());
+    }
+    this.cicloActivo = this.cicloService.getCicloActivo();
+
+    //cargar grupos filtrados por ciclo
     this.cargarGrupos();
   }
 
@@ -104,7 +127,7 @@ export class GruposComponent implements OnInit {
   onDiaChange(event: any): void {
     const dia = event.target.value;
 
-    if (event.target.checked) {
+    if (event.target.checked) {  
       this.diasSeleccionados.push(dia);
     } else {
       this.diasSeleccionados =
@@ -112,6 +135,12 @@ export class GruposComponent implements OnInit {
     }
 
     this.grupoSeleccionado.dia = this.diasSeleccionados.join(', ');
+  }
+
+  cambiarCiclo(ciclo: string) {
+    this.cicloActivo = ciclo;
+    this.cicloService.setCicloActivo(ciclo);
+    this.cargarGrupos();
   }
 
   cargarCursos(): void {
@@ -130,10 +159,12 @@ export class GruposComponent implements OnInit {
    */
 
   cargarGrupos(): void {
-    this.grupoService.listarGrupos().subscribe({
-      next: (data) => this.grupos = data,
-      error: (err) => console.error('Error al cargar grupos ', err)
-    });
+    this.grupoService
+      .listarGruposPorCiclo(this.cicloActivo)
+      .subscribe({
+        next: (data) => this.grupos = data,
+        error: (err) => console.error('Error al cargar grupos', err)
+      });
   }
 
 
@@ -155,6 +186,11 @@ export class GruposComponent implements OnInit {
 
     if (!this.grupoSeleccionado.dia || this.grupoSeleccionado.dia.length === 0) {
       Swal.fire('Error', 'Debe seleccionar al menos un día', 'error');
+      return;
+    }
+
+    if (!this.grupoSeleccionado.cicloEscolar) {
+      Swal.fire('Error', 'Debe seleccionar un ciclo escolar', 'error');
       return;
     }
 
@@ -182,8 +218,8 @@ export class GruposComponent implements OnInit {
   }
 
 
-  async eliminarGrupo(grupo: GrupoResponse): Promise<void>{
-    if(!grupo.id) return;
+  async eliminarGrupo(grupo: GrupoResponse): Promise<void> {
+    if (!grupo.id) return;
 
     const result = await Swal.fire({
       title: '¿Estás seguro?',
@@ -195,7 +231,7 @@ export class GruposComponent implements OnInit {
       reverseButtons: true
     });
 
-    if(result.isConfirmed){
+    if (result.isConfirmed) {
       this.grupoService.eliminarGrupo(grupo.id).subscribe({
         next: () => {
           this.cargarGrupos();
@@ -205,12 +241,12 @@ export class GruposComponent implements OnInit {
           })
         },
         error: (err) => {
-          if (err.status === 409){
+          if (err.status === 409) {
             Swal.fire({
               icon: 'warning',
               text: err.error?.message || 'Debe eliminar los alumnos del grupo antes'
             });
-          } else{
+          } else {
             Swal.fire({
               icon: 'error',
               text: 'Ocurrió un error inesperado'
