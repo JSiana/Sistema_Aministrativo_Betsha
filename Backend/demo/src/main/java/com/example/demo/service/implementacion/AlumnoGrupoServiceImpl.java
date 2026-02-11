@@ -1,5 +1,6 @@
 package com.example.demo.service.implementacion;
 
+import com.example.demo.dto.AlumnoGrupoResponseDTO;
 import com.example.demo.model.AlumnoGrupo;
 import com.example.demo.model.Alumnos;
 import com.example.demo.model.Grupos;
@@ -26,6 +27,8 @@ public class AlumnoGrupoServiceImpl implements AlumnoGrupoService {
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+
 
     @Override
     public AlumnoGrupo asignarAlumno(Long grupoId, Long alumnoId) {
@@ -76,6 +79,37 @@ public class AlumnoGrupoServiceImpl implements AlumnoGrupoService {
 
         // Borramos solo la relación, el alumno y el grupo siguen existiendo en sus tablas
         alumnoGrupoRepository.delete(asignacion);
+    }
+
+    public AlumnoGrupoResponseDTO obtenerDetalleBanner(Long id) {
+        AlumnoGrupo ag = alumnoGrupoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Asignación no encontrada con ID: " + id));
+
+        AlumnoGrupoResponseDTO dto = new AlumnoGrupoResponseDTO();
+        dto.setId(ag.getId());
+
+        // Unir nombres y apellidos de forma limpia
+        StringBuilder sb = new StringBuilder();
+        appendIfPresent(sb, ag.getAlumno().getPrimerNombre());
+        appendIfPresent(sb, ag.getAlumno().getSegundoNombre());
+        appendIfPresent(sb, ag.getAlumno().getTercerNombre());
+        appendIfPresent(sb, ag.getAlumno().getPrimerApellido());
+        appendIfPresent(sb, ag.getAlumno().getSegundoApellido());
+
+        dto.setNombreCompleto(sb.toString().trim());
+        dto.setCodigoPersonal(ag.getAlumno().getCodigoPersonal());
+        dto.setNombreCurso(ag.getGrupo().getCurso().getNombre());
+        dto.setCodigoGrupo(ag.getGrupo().getCodigo());
+
+        return dto;
+    }
+
+    // Método auxiliar para evitar espacios extras si un nombre es nulo
+    private void appendIfPresent(StringBuilder sb, String text) {
+        if (text != null && !text.trim().isEmpty()) {
+            if (sb.length() > 0) sb.append(" ");
+            sb.append(text.trim());
+        }
     }
 
 }

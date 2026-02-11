@@ -16,6 +16,7 @@ import { UsersFormComponent } from './business/users-form/users-form.component';
 import { EncargadoComponent } from './business/encargado/encargado.component';
 import { GruposComponent } from './business/grupos/grupos.component';
 import { InfoGrupoComponent } from './business/info-grupo/info-grupo.component';
+import { InfoPagoComponent } from './business/info-pago/info-pago.component';
 
 const routes: Routes = [
 
@@ -38,7 +39,9 @@ const routes: Routes = [
       {path: 'users-form', component:UsersFormComponent},
       {path: 'encargado', component:EncargadoComponent},
       {path: 'grupos', component:GruposComponent},
-      {path: 'grupos/info-grupo/:id', component:InfoGrupoComponent}
+      {path: 'grupos/info-grupo/:id', component:InfoGrupoComponent},
+      {path: 'pagos/historial/:id', component:InfoPagoComponent}
+
     ]
   },
   {path:'**', redirectTo:'login'},

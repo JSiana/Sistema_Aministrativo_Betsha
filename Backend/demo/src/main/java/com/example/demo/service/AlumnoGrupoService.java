@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.AlumnoGrupoResponseDTO;
 import com.example.demo.model.AlumnoGrupo;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface AlumnoGrupoService {
     List<AlumnoGrupo> listarGruposPorAlumno(Long alumnoId);
 
     void quitarAlumno(Long grupoId, Long alumnoId);
+
+    AlumnoGrupoResponseDTO obtenerDetalleBanner(Long id);
 }

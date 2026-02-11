@@ -1,0 +1,149 @@
+<div class="container-fluid p-0">
+    <div class="card-header bg-white py-1 d-flex justify-content-between align-items-center">
+        <h2 class="mb-0 text-primary fw-bold"><i class="bi bi-pencil-square me-2"></i>Registro de pagos</h2>
+        <button class="btn btn-outline-secondary btn-sm" (click)="regresar()">
+            <i class="bi bi-arrow-left"></i> Volver
+        </button>
+    </div>
+
+    <div *ngIf="alumnoInfo; else cargando">
+        <div class="card bg-primary text-white shadow-sm mb-4">
+            <div class="card-body p-2">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="fw-bold mb-0">{{ alumnoInfo.nombreCompleto }}</h3>
+                        <p class="mb-0 opacity-75 fs-5">Código Personal: <strong>{{ alumnoInfo.codigoPersonal
+                                }}</strong></p>
+                    </div>
+                    <div class="col-md-4 text-md-end border-start-md">
+                        <h5 class="mb-0 fw-semibold">{{ alumnoInfo.nombreCurso }}</h5>
+                        <p class="mb-0">Grupo: <span class="badge bg-white text-primary fw-bold">{{
+                                alumnoInfo.codigoGrupo }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #cargando>
+        <div class="alert alert-info shadow-sm mb-4" *ngIf="loading">
+            <div class="spinner-border spinner-border-sm me-2"></div>
+            Buscando información del alumno...
+        </div>
+    </ng-template>
+
+    <div class="card shadow-sm border-0 mb-4">
+
+
+        <div class="card-body bg-light">
+            <form (ngSubmit)="registrarPago()" #pagoForm="ngForm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Mes a Pagar</label>
+                        <select class="form-select" [(ngModel)]="nuevoPago.mes" name="mes" required>
+                            <option value="" disabled selected>Seleccione mes...</option>
+                            <option *ngFor="let mes of meses" [value]="mes">{{ mes }}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Concepto</label>
+                        <select class="form-select" [(ngModel)]="nuevoPago.tipoPago" name="tipoPago" required>
+                            <option value="" disabled selected>Seleccione...</option>
+                            <option value="INSCRIPCION">Inscripción</option>
+                            <option value="COLEGIATURA">Colegiatura</option>
+                            <option value="PAPELERIA">Papelería</option>
+                            <option value="OTRO">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Monto (Q)</label>
+                        <input type="number" class="form-control" [(ngModel)]="nuevoPago.monto" name="monto" required
+                            min="1">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Mora (Q)</label>
+                        <input type="number" class="form-control" [(ngModel)]="nuevoPago.mora" name="mora">
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button type="reset" class="btn btn-light  fw-bold">Limpiar</button>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">No. Comprobante / Boleta</label>
+                        <input type="text" class="form-control" [(ngModel)]="nuevoPago.numeroBoleta" name="numeroBoleta"
+                            required placeholder="Ej: 456789">
+                    </div>
+
+                    <div class="col-md-7">
+                        <label class="form-label fw-bold">Observaciones</label>
+                        <input type="text" class="form-control" [(ngModel)]="nuevoPago.observaciones"
+                            name="observaciones" placeholder="Ej: Pago atrasado por beca">
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                         <button type="submit" class="btn btn-primary btn-sm px-4 fw-bold" [disabled]="!pagoForm.form.valid">
+                            <i class="bi bi-cash me-1"></i> Guardar Pago
+                            </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="alert alert-warning shadow-sm mb-4" *ngIf="!alumnoInfo && !loading">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        No se han encontrado datos previos para la asignación: <strong>{{ alumnoId }}</strong>
+    </div>
+
+    <div class="card shadow-lg border-0 mb-5">
+        <div class="card-header bg-primary text-white p-3">
+            <h5 class="mb-0 fw-bold">Historial Detallado de Pagos</h5>
+            
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-dark">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Tipo de Pago</th>
+                            <th>Mes</th>
+                            <th>Monto</th>
+                            <th>Mora</th>
+                            <th>No. Comprobante</th>
+                            <th>Fecha Registro</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pago of pagos">
+                            <td>#{{ pago.id }}</td>
+                            <td>
+                                <span>{{ pago.tipoPago }}</span>
+                            </td>
+                            <td>{{ pago.mes }}</td>
+                            <td class="fw-bold">Q {{ pago.monto | number:'1.2-2' }}</td>
+                            <td [class.text-danger]="pago.mora > 0">
+                                Q {{ pago.mora | number:'1.2-2' }}
+                            </td>
+                            <td>{{ pago.numeroBoleta }}</td>
+                            <td>{{ pago.fechaPago | date:'dd/MM/yyyy' }}</td>
+                            <td class="small text-muted">{{ pago.observaciones || '---' }}</td>
+                        </tr>
+                        <tr *ngIf="pagos.length === 0 && !loading">
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-folder-x fs-1 d-block text-muted mb-2"></i>
+                                <p class="text-muted">No se encontraron pagos registrados para este alumno.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

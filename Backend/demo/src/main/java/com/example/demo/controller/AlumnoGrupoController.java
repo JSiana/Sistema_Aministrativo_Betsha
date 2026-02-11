@@ -1,14 +1,16 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AlumnoGrupoResponseDTO;
 import com.example.demo.model.AlumnoGrupo;
 import com.example.demo.service.AlumnoGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/alumno-grupo")
+@RequestMapping("/api/alumno-grupo")
 public class AlumnoGrupoController {
 
     @Autowired
@@ -32,8 +34,13 @@ public class AlumnoGrupoController {
         return alumnoGrupoService.listarGruposPorAlumno(alumnoId);
     }
 
-    @DeleteMapping("/{grupoId}/alumnos/{alumnoId}")
+    @DeleteMapping("/{grupoId}/alumno/{alumnoId}")
     public void quitarAlumno(@PathVariable Long grupoId, @PathVariable Long alumnoId) {
         alumnoGrupoService.quitarAlumno(grupoId, alumnoId);
+    }
+
+    @GetMapping("/{id}/detalle-banner")
+    public ResponseEntity<AlumnoGrupoResponseDTO> obtenerDetalleBanner(@PathVariable Long id) {
+        return ResponseEntity.ok(alumnoGrupoService.obtenerDetalleBanner(id));
     }
 }
