@@ -23,7 +23,7 @@ public class JwtUtil {
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
-    private static final long EXPIRATION_TIME = 30 * 60 * 1000; // 15 minutos
+    private static final long EXPIRATION_TIME = 600000;
 
     public String generateToken(String username, String rol) {
 
@@ -66,6 +66,19 @@ public class JwtUtil {
                 .getBody();
     }
 
+    public Claims getClaimsIgnoreExpiration(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .setAllowedClockSkewSeconds(60) // Permite un margen de 60 segundos de diferencia
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            // Si el token expiró, aún así podemos recuperar los datos (claims) del error
+            return e.getClaims();
+        }
+    }
 
 
 }

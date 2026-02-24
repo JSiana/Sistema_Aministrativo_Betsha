@@ -11,4 +11,6 @@ public interface PagoService {
     PagoResponseDTO registrarPago(PagoDTO request);
 
     List<Pagos> obtenerHistorialPorAsignacion(Long alumnoGrupoId);
+
+    void eliminarPago(Long id, String motivo);
 }

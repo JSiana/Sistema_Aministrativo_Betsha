@@ -7,6 +7,7 @@ export interface GrupoResponse {
     dia: string;
     cicloEscolar: string;
     cantidadAlumnos: number;
+    
 }
 
 export interface GrupoDTO {

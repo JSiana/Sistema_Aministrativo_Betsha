@@ -22,4 +22,7 @@ export interface PagoResponseDTO {
     totalPagado: number;      // El monto + mora calculado en el Java
     ultimoMesPagado: string;
     observaciones?: string;
+    motivoAnulacion?: string;
+    fechaEliminacion?: Date;
+    activo: boolean;
 }

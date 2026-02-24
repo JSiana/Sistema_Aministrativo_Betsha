@@ -1,20 +1,15 @@
+<div class="layout-wrapper">
+  <app-header (toggleSidebar)="toggleSidebar()" class="header-area shadow-sm"></app-header>
 
-<div class="d-flex flex-column">
-  <!-- Header -->
-  <app-header (toggleSidebar)="toggleSidebar()" class="header-fixed"></app-header>
-
-  <!-- Main content -->
   <div class="content-wrapper">
-    <!-- Sidebar -->
-    <app-sidebar [ngClass]="{'collapsed': !showSidebar }" class="sidebar p-4"></app-sidebar>
+    <app-sidebar [ngClass]="{'collapsed': !showSidebar }" class="sidebar-area"></app-sidebar>
     
-    <!-- Main area -->
-    <main [ngClass]="{ 'expanded': !showSidebar }" class="main-content p-4">
-      
-      <router-outlet></router-outlet>
+    <main [ngClass]="{ 'expanded': !showSidebar }" class="main-content">
+      <div class="p-4">
+        <router-outlet></router-outlet>
+      </div>
     </main>
   </div>
 
-  <!-- Footer -->
-  <app-footer class="footer-fixed"></app-footer>
+  <app-footer class="footer-area border-top"></app-footer>
 </div>

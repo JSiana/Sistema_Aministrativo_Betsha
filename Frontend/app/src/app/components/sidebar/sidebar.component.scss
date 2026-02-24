@@ -1,37 +1,109 @@
-:host{
-background: #f1f1f1;
-font-size: 18px;
-  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.3); /* sombra hacia abajo */
-
-  padding-bottom: 12px;
+:host {
+  display: block;
+  width: 260px;
+  background-color: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  height: calc(100vh - 100px);
 }
 
-.notificacion{
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.sidebar-container {
+  /* Asegura que el contenedor no haga scroll innecesario y use todo el alto */
+  height: 100%;
 }
 
-.sid{
-  position: absolute;
+.nav-wrapper {
+  /* Esta es la clave para centrar todas las opciones verticalmente */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
-a.nav-link {
+.main-link {
+
+  font-size: 18px !important;
+  padding: 10px 16px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #f1f5f9;
+    color: #1e293b;
+    padding-left: 20px; // Pequeño efecto de desplazamiento al hover
+  }
+
+  &.active {
+    background-color: #eef2ff;
+    color: #4f46e5;
   }
 }
 
-ul {
-  transition: all 0.03s ease;
+.submenu-list {
+  padding-left: 35px;
+  list-style: none;
+  margin: 4px 0;
+
+  .sub-link {
+    
+    font-size: 18px;
+    padding: 6px 16px;
+    color: #94a3b8;
+    cursor: pointer;
+    border-radius: 8px;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+
+    &:hover {
+      background-color: #f1f5f9;
+      color: #1e293b;
+
+    }
+
+    &.active {
+      background-color: #eef2ff;
+      color: #4f46e5;
+    }
+  }
 }
 
-.container{
-  top: 50% !important;
+
+.arrow-icon {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
 }
 
+.menu-open .arrow-icon {
+  transform: rotate(90deg);
+}
+
+.brand-section {
+  flex-shrink: 0; // Evita que el logo se aplaste
+
+  .logo-circle {
+    width: 32px;
+    height: 32px;
+    background: #4f46e5;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+  }
+}
+
+.footer-section {
+  flex-shrink: 0; // Evita que el footer se aplaste
+}
+
+.nav-link {
+  color: #64748b !important;
+  /* Un gris elegante */
+  text-decoration: none;
+}

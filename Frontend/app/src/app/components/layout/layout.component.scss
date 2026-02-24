@@ -1,61 +1,54 @@
-
 .layout-wrapper {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  width: 100%; // Cambiado de 100vw a 100%
+  overflow: hidden; 
 }
 
-.header-fixed {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1030;
-  height: 70px;
-}
-
-.footer-fixed {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 80px;
-  z-index: 1030;
-}
-
+/* El contenido central debe ser el único con permiso de tener scroll */
 .content-wrapper {
   display: flex;
-  flex-grow: 1;
-  margin-top: 70px; /* altura del header */
-  margin-bottom: 80px; /* altura del footer */
-  overflow: hidden;
-  height: calc(100vh - 70px - 80px);
+  flex: 1; 
+  overflow: hidden; /* Evita que este contenedor crezca más que el espacio disponible */
 }
 
-.sidebar {
+.main-content {
+  flex: 1;
+  overflow-y: auto; /* SOLO aquí se permite el scroll si el contenido es largo */
+  background-color: #f8f9fa;
+}
+
+.header-area {
+  flex-shrink: 0; // Obligatorio
+  height: 70px;
+  width: 100%;
+  z-index: 1030;
+}
+
+/* Sidebar */
+.sidebar-area {
   width: 250px;
-  transition: transform 0.9s ease, opacity 0.9s ease;
-  transform: translateX(0)  ;
-  opacity: 1;
-  justify-content: center;
+  min-width: 250px;
+  background: white;
+  border-right: 1px solid #eef2f6;
+  transition: all 0.4s ease;
+  overflow-y: auto;
 }
 
-.main-content{
-  margin: 0;
-  padding: 0;
-  justify-content: center;
-  flex-grow: 1;
-  display: block;
-  height: 100%;
-  transition: margin-left 0.9s ease;
-}
-
-.sidebar.collapsed {
-  transform: translateX(-100%);
-  opacity: 0;
-  pointer-events: none; // opcional, para evitar clics mientras está oculto
-  justify-content: center;
-}
-
-
-.main-content.expanded {
+.sidebar-area.collapsed {
   margin-left: -250px;
+}
 
+
+
+/* Forzamos que el footer NO crezca ni se encoja */
+.footer-area {
+  flex-shrink: 0; // Obligatorio para evitar scroll vertical accidental
+  width: 100%;
+  height: 60px; // Altura fija
+  background-color: #fff;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
 }

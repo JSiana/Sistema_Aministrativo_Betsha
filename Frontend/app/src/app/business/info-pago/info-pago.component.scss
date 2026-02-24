@@ -1,0 +1,18 @@
+.custom-back {
+    color: #1e293b !important;
+    font-size: 18px !important;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    &:hover {
+        color:  red !important;
+        padding-left: 5px;
+    }
+}

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -24,5 +26,8 @@ public class AlumnoGrupo {
     @JoinColumn(name = "grupo_id", nullable = false)
     @JsonIgnoreProperties("alumnoGrupos") // <--- Evita que el grupo vuelva a llamar a esta tabla
     private Grupos grupo;
+
+    @OneToMany(mappedBy = "alumnoGrupo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pagos> pagos;
 
 }

@@ -12,12 +12,11 @@ public class AuthController {
 
     @PostConstruct
     public void init() {
-        System.out.println("✅ AuthController está activo y ejecutándose.");
     }
 
 
     @Autowired
-    private UsuarioRepository usuarioRepository; // 📌 Conectado a la BD
+    private UsuarioRepository usuarioRepository;
 
 
 

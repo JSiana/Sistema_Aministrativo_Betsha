@@ -17,6 +17,7 @@ import { EncargadoComponent } from './business/encargado/encargado.component';
 import { GruposComponent } from './business/grupos/grupos.component';
 import { InfoGrupoComponent } from './business/info-grupo/info-grupo.component';
 import { InfoPagoComponent } from './business/info-pago/info-pago.component';
+import { AsistenciaComponent } from './business/asistencia/asistencia.component';
 
 const routes: Routes = [
 
@@ -40,7 +41,8 @@ const routes: Routes = [
       {path: 'encargado', component:EncargadoComponent},
       {path: 'grupos', component:GruposComponent},
       {path: 'grupos/info-grupo/:id', component:InfoGrupoComponent},
-      {path: 'pagos/historial/:id', component:InfoPagoComponent}
+      {path: 'pagos/historial/:id', component:InfoPagoComponent},
+      {path: 'asistencia', component: AsistenciaComponent}
 
     ]
   },

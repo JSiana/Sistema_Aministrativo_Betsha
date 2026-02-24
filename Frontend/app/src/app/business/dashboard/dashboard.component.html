@@ -1,66 +1,103 @@
-<div class="container-fluid mt-4">
-        <!-- Primera fila: tarjetas -->
-        <div class="row mb-4">
-                <!-- Card 1: Usuarios -->
-                <div class="col-md-3">
-                        <div class="card text-white bg-primary shadow rounded-3">
-                                <div class="card-body">
-                                        <h5 class="card-title">Usuarios</h5>
-                                        <p class="card-text fs-4">120</p>
-                                </div>
-                        </div>
-                </div>
-                <!-- Card 2: Alumnos -->
-                <div class="col-md-3">
-                        <div class="card text-white bg-success shadow rounded-3">
-                                <div class="card-body">
-                                        <h5 class="card-title">Alumnos</h5>
-                                        <p class="card-text fs-4">540</p>
-                                </div>
-                        </div>
-                </div>
-                <!-- Card 3: Aprobados -->
-                <div class="col-md-3">
-                        <div class="card text-white bg-success shadow rounded-3">
-                                <div class="card-body">
-                                        <h5 class="card-title">Aprobados</h5>
-                                        <p class="card-text fs-4">472</p>
-                                </div>
-                        </div>
-                </div>
-                <!-- Card 4: Reprobados -->
-                <div class="col-md-3">
-                        <div class="card text-white bg-danger shadow rounded-3">
-                                <div class="card-body">
-                                        <h5 class="card-title">Reprobados</h5>
-                                        <p class="card-text fs-4">68</p>
-                                </div>
-                        </div>
-                </div>
+<div class="dashboard-fixed px-2">
+  
+  <div class="row gx-2 mb-2 pb-3">
+    <div class="col-3">
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body d-flex align-items-center py-2 px-2">
+          <div class="icon-box-mini bg-primary-soft text-primary">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="ms-2">
+            <p class="label-mini mb-0 text-muted fw-bold">USUARIOS</p>
+            <h5 class="mb-0 fw-bold">120</h5>
+          </div>
         </div>
-
-        <!-- Segunda fila: gráfico y calendario -->
-        <div class="row">
-                <!-- Gráfico -->
-                <div class="col-md-8">
-                        <h2>Pagos</h2>
-                        <div class="card shadow mb-4">
-                                <div class="card-body p-2">
-                                        <canvas baseChart [data]="pagosData" [options]="pagosOptions" type="bar">
-                                        </canvas>
-                                </div>
-                        </div>
-                </div>
-
-                <div class="col-md-4">
-                        <h2>Calendario</h2>
-                        <div class="card shadow mb-4">
-                                <div class="card-body p-2">
-                                        <div class="calendar">
-                                                <full-calendar [options]="calendarOptions"></full-calendar>
-                                        </div>
-                                </div>
-                        </div>
-                </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body d-flex align-items-center py-2 px-2">
+          <div class="icon-box-mini bg-success-soft text-success">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+          <div class="ms-2">
+            <p class="label-mini mb-0 text-muted fw-bold">ALUMNOS</p>
+            <h5 class="mb-0 fw-bold">540</h5>
+          </div>
         </div>
-</div> <!-- cierre correcto de container-fluid -->
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body d-flex align-items-center py-2 px-2">
+          <div class="icon-box-mini bg-info-soft text-info">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div class="ms-2">
+            <p class="label-mini mb-0 text-muted fw-bold">APROBADOS</p>
+            <h5 class="mb-0 fw-bold">472</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body d-flex align-items-center py-2 px-2">
+          <div class="icon-box-mini bg-danger-soft text-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <div class="ms-2">
+            <p class="label-mini mb-0 text-muted fw-bold">REPROBADOS</p>
+            <h5 class="mb-0 fw-bold">68</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row gx-2 flex-grow-1 min-h-0">
+    <div class="col-8 h-100">
+      <div class="card border-0 shadow-sm rounded-3 h-100">
+        <div class="card-header bg-white border-0 py-2">
+          <h6 class="fw-bold mb-0 small">Estadísticas de Pagos</h6>
+        </div>
+        <div class="card-body p-2 chart-container">
+          <canvas baseChart [data]="pagosData" [options]="pagosOptions" type="bar"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 h-100">
+      <div class="card border-0 shadow-sm rounded-3 h-100">
+        <div class="card-header bg-white border-0 py-2">
+          <h6 class="fw-bold mb-0 small">Pagos Recientes</h6>
+        </div>
+        <div class="card-body p-0 overflow-auto" style="max-height: 100%;">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item py-1 px-2 border-0 small d-flex justify-content-between">
+              <span>Juan Pérez</span> <b class="text-success">Q250</b>
+            </li>
+            <li class="list-group-item py-1 px-2 border-0 small d-flex justify-content-between">
+              <span>María López</span> <b class="text-success">Q150</b>
+            </li>
+            <li class="list-group-item py-1 px-2 border-0 small d-flex justify-content-between">
+              <span>Carlos Ruíz</span> <b class="text-success">Q100</b>
+            </li>
+            <li class="list-group-item py-1 px-2 border-0 small d-flex justify-content-between">
+              <span>Ana Torres</span> <b class="text-success">Q300</b>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-3 mt-2">
+    <div class="card-body py-1 px-3 d-flex align-items-center gap-3">
+      <span class="badge bg-primary rounded-pill">AGENDA</span>
+      <marquee class="small text-muted" scrollamount="3">
+        15 de Feb: Exámenes de Computación • 20 de Feb: Cierre de cuotas mensuales • 25 de Feb: Entrega de notas
+      </marquee>
+    </div>
+  </div>
+
+</div>

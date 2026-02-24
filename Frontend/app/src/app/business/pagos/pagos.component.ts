@@ -13,11 +13,16 @@ import { AlumnoGrupoService } from '../../services/alumnoGrupo/alumno-grupo.serv
 })
 export class PagosComponent {
 
-  cicloActivo: string ="";
+  cicloActivo: string = "";
   ciclos: string[] = [];
   grupos: GrupoResponse[] = [];
   grupoSeleccionado: number | null = null;
-  alumnos: any[]=[];
+  alumnos: any[] = [];
+
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
+  Math = Math; // Para usar Math.min en el HTML
+
 
   constructor(
     private cicloService: CicloService,
@@ -30,6 +35,7 @@ export class PagosComponent {
 
   ngOnInit(): void {
 
+    this.cicloActivo = this.cicloService.getCicloActivo();
 
     const anioActual = new Date().getFullYear();
     this.ciclos = [];
@@ -37,7 +43,8 @@ export class PagosComponent {
     for (let i = anioActual - 1; i <= anioActual + 3; i++) {
       this.ciclos.push(i.toString());
     }
-
+    this.cicloActivo = this.cicloService.getCicloActivo();
+    this.cargarGrupos();
 
   }
 
@@ -60,16 +67,30 @@ export class PagosComponent {
   }
 
   cargarAlumnos(grupoId: number) {
+  // 1. Reiniciamos la página a 1 cada vez que cambiamos de grupo
+  this.paginaActual = 1;
+
   if (!grupoId) {
-    this.alumnos = []; // Limpiar si no hay grupo
+    this.alumnos = []; 
     return;
   }
 
   this.alumnoGrupoService.listarAlumnosDelGrupo(grupoId).subscribe({
-    next: (data) => this.alumnos = data,
-    error: () => this.alumnos = []
+    next: (data) => {
+      this.alumnos = data;
+      this.paginaActual = 1;
+    },
+    error: () => {
+      this.alumnos = [];
+    }
   });
 }
+
+  get totalPaginas(): number[] {
+    const cuenta = Math.ceil(this.alumnos.length / this.itemsPorPagina);
+    return Array.from({ length: cuenta }, (_, i) => i + 1);
+  }
+
 
 
 

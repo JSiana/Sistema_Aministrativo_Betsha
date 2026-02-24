@@ -1,18 +1,17 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PagoResponseDTO {
 
     private Long id;
@@ -28,5 +27,8 @@ public class PagoResponseDTO {
     private BigDecimal totalPagado;
     private String ultimoMesPagado;
     private String observaciones;
+    private String motivoAnulacion;
+    private LocalDateTime fechaEliminacion;
+    private boolean activo;
 
 }

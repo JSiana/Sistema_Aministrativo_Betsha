@@ -28,5 +28,14 @@ public class PagoController {
         return ResponseEntity.ok(pagoService.obtenerHistorialPorAsignacion(alumnoGrupoId));
     }
 
+    @PutMapping("/anular/{id}")
+    public ResponseEntity<Void> anularPago(@PathVariable Long id,
+                                           @RequestParam("motivo") String motivo){
+        pagoService.eliminarPago(id, motivo);
+
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }

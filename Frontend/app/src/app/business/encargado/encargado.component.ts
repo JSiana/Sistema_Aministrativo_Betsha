@@ -16,6 +16,15 @@ export class EncargadoComponent {
   modoEdicion: boolean = false;
   encargadoSeleccionado: EncargadoDTO = this.crearEncargadoVacio();
 
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
+  Math = Math;
+
+  get totalPaginas(): number[] {
+    const total = Math.ceil(this.encargados.length / this.itemsPorPagina);
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
   constructor(private encargadoService: EncargadoService) { }
 
   ngOnInit(): void {

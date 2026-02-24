@@ -27,6 +27,15 @@ export class AlumnosComponent implements OnInit {
   encargados: EncargadoResponse[] = [];
   encargadoSeleccionadoId: number | null = null;
 
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
+  Math = Math; // Esto es para que el HTML reconozca Math.min
+
+  // 2. Getter para generar el arreglo de páginas dinámicamente
+  get totalPaginas(): number[] {
+    const total = Math.ceil(this.alumnos.length / this.itemsPorPagina);
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
 
   /**
    * Crear un objeto vacio para inicializar

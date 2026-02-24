@@ -1,0 +1,44 @@
+/* Colores suaves para Badges y Avatares */
+.bg-soft-primary {
+    background-color: #eef2ff !important;
+    color: #4f46e5 !important;
+}
+
+.bg-success-soft {
+    background-color: #f0fdf4 !important;
+    color: #16a34a !important;
+}
+
+.bg-blue-light {
+    background-color: #f0f9ff !important;
+}
+
+
+.btn-white {
+    background-color: #fff;
+    color: #334155;
+    &:hover {
+        background-color: #f8fafc;
+        color: #4f46e5;
+    }
+}
+
+
+
+
+.page-link {
+    color: #64748b;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        background-color: #f1f5f9;
+        color: #4f46e5;
+    }
+}
+
+.page-item.disabled .page-link {
+    background-color: transparent;
+    color: #cbd5e1;
+}
+

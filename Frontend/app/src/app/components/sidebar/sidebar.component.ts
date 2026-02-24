@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { trigger, state,style,transition,animate } from '@angular/animations';
-
+import { Component } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,35 +8,33 @@ import { trigger, state,style,transition,animate } from '@angular/animations';
   styleUrl: './sidebar.component.scss',
   animations: [
     trigger('submenuToggle', [
-      state('hidden', style({
+      // Usamos 'open' y 'closed' para que sea más intuitivo
+      state('closed', style({
         height: '0',
         opacity: 0,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        paddingTop: '0',
+        paddingBottom: '0'
       })),
-      state('visible', style({
+      state('open', style({
         height: '*',
-        opacity: 1,
-        overflow: 'hidden'
+        opacity: 1
       })),
-      transition('hidden <=> visible', animate('300ms ease'))
+      transition('closed <=> open', animate('300ms cubic-bezier(0.4, 0, 0.2, 1)'))
     ])
   ]
 })
 export class SidebarComponent {
-
+  // Guardamos qué menú está expandido
   activeSubmenu: string | null = null;
 
   toggleSubmenu(menu: string): void {
+    // Si haces clic en el que ya está abierto, se cierra (null), si no, se abre el nuevo
     this.activeSubmenu = this.activeSubmenu === menu ? null : menu;
   }
 
-  isActive(menu: string): boolean {
-    return this.activeSubmenu === menu;
+  // Esta función es la que llama el HTML para la animación y la clase .menu-open
+  getState(menu: string): string {
+    return this.activeSubmenu === menu ? 'open' : 'closed';
   }
-
-  getState(menu: string): 'visible' | 'hidden' {
-    return this.isActive(menu) ? 'visible' : 'hidden';
-  }
-
 }
- 

@@ -1,0 +1,38 @@
+.dashboard-fixed {
+  height: calc(100vh - 190px); 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.min-h-0 {
+  min-height: 0;
+  flex: 1; /* Esto obliga a la fila central a usar el espacio sobrante */
+}
+
+.chart-container {
+  position: relative;
+  height: calc(100% - 30px);
+  width: 100%;
+}
+
+.icon-box-mini {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.label-mini { font-size: 0.6rem !important; }
+h5 { font-size: 1.1rem !important; }
+
+.bg-primary-soft { background: #eef2ff; color: #4f46e5; }
+.bg-success-soft { background: #f0fdf4; color: #16a34a; }
+.bg-info-soft    { background: #f0f9ff; color: #0ea5e9; }
+.bg-danger-soft  { background: #fef2f2; color: #dc2626; }
+
+/* Evita que Bootstrap rompa el layout */
+.row { margin: 0 !important; }

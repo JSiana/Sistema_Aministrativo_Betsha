@@ -10,6 +10,7 @@ import com.example.demo.repository.RolesRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.RolesService;
 import com.example.demo.service.UsuarioService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -156,5 +157,26 @@ public class UsuarioController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String authHeader) {
+        try {
+            String oldToken = authHeader.substring(7);
+
+            // Usamos el nuevo método que no explota si el token venció hace poco
+            Claims claims = jwtUtil.getClaimsIgnoreExpiration(oldToken);
+
+            String username = claims.getSubject();
+            List<String> authorities = claims.get("authorities", List.class);
+            String rol = authorities.get(0).toString().replace("ROLE_", "");
+
+            // Generamos el nuevo token
+            String newToken = jwtUtil.generateToken(username, rol);
+
+            return ResponseEntity.ok(Map.of("token", newToken));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No se pudo refrescar");
+        }
+    }
 
 }

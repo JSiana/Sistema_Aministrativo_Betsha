@@ -34,7 +34,7 @@ public class AlumnoGrupoController {
         return alumnoGrupoService.listarGruposPorAlumno(alumnoId);
     }
 
-    @DeleteMapping("/{grupoId}/alumno/{alumnoId}")
+    @DeleteMapping("/{grupoId}/alumnos/{alumnoId}")
     public void quitarAlumno(@PathVariable Long grupoId, @PathVariable Long alumnoId) {
         alumnoGrupoService.quitarAlumno(grupoId, alumnoId);
     }
@@ -43,4 +43,6 @@ public class AlumnoGrupoController {
     public ResponseEntity<AlumnoGrupoResponseDTO> obtenerDetalleBanner(@PathVariable Long id) {
         return ResponseEntity.ok(alumnoGrupoService.obtenerDetalleBanner(id));
     }
+
+
 }

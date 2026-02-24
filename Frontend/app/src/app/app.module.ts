@@ -39,6 +39,7 @@ import { InfoGrupoComponent } from './business/info-grupo/info-grupo.component';
 import { SpinnerInterceptor } from './interceptors/spinner.interceptor';
 import { SpinnerModule } from './components/spinner/spinner.module';
 import { InfoPagoComponent } from './business/info-pago/info-pago.component';
+import { AsistenciaComponent } from './business/asistencia/asistencia.component';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { InfoPagoComponent } from './business/info-pago/info-pago.component';
     EncargadoComponent,
     GruposComponent,
     InfoGrupoComponent,
-    InfoPagoComponent
+    InfoPagoComponent,
+    AsistenciaComponent
   ],
   imports: [
     BrowserModule,

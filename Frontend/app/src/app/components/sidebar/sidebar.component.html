@@ -1,92 +1,92 @@
-<div class="notificacion">
-  <button type="button" class="btn btn-light position-relative ">
-    <i class="bi bi-bell-fill fs-5"></i>
-    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-      3
-    </span>
-  </button>
-
-</div>
-<div class="sid">
+<div class="sidebar-container d-flex flex-column h-100">
 
 
+  <div class="nav-wrapper d-flex flex-column justify-content-center flex-grow-1">
+    <nav class="nav-content px-3">
+      <ul class="nav flex-column gap-1">
 
-  <ul class="nav flex-column text-dark">
+        <li class="nav-item">
+          <a routerLink="/dashboard" routerLinkActive="active" class="nav-link main-link">
+            <i class="bi bi-grid-1x2-fill me-3"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
 
-    <!-- Dashboard -->
-    <li class="nav-item">
-      <a routerLink="/dashboard" class="nav-link text-dark">
-        <i class="bi bi-speedometer2 me-2"></i> Dashboard
-      </a>
-    </li>
+        <li class="nav-item">
+          <div class="nav-link main-link has-submenu" (click)="toggleSubmenu('grupos')"
+            [class.menu-open]="getState('grupos') === 'open'">
+            <i class="bi bi-people-fill me-3"></i>
+            <span>Grupos</span>
+            <i class="bi bi-chevron-right ms-auto arrow-icon"></i>
+          </div>
+          <ul class="submenu-list flex-column" [@submenuToggle]="getState('grupos')">
+            <li><a routerLink="/grupos" routerLinkActive="active-sub" class="nav-link sub-link ">Grupos activos</a></li>
+            <li><a routerLink="/asistencia" class="nav-link sub-link">Asistencia</a></li>
+          </ul>
+        </li>
 
-    <!-- Grupos-->
+        <li class="nav-item">
+          <div class="nav-link main-link has-submenu" (click)="toggleSubmenu('registros')"
+            [class.menu-open]="getState('registros') === 'open'">
+            <i class="bi bi-folder-fill me-3"></i>
+            <span>Registros</span>
+            <i class="bi bi-chevron-right ms-auto arrow-icon"></i>
+          </div>
+          <ul class="submenu-list flex-column" [@submenuToggle]="getState('registros')">
+            <li><a routerLink="/alumnos" routerLinkActive="active-sub" class="nav-link sub-link ">Alumnos</a></li>
+            <li><a routerLink="/encargado" routerLinkActive="active-sub" class="nav-link sub-link ">Encargados</a></li>
+          </ul>
+        </li>
 
-    <li>
-      <a (click)="toggleSubmenu('grupos')" class="nav-link text-dark" role="button">
-        <i class="bi bi-people me-2"></i> Grupos
-      </a>
-      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('grupos')">
-        <li><a routerLink="/grupos" class="nav-link text-dark">Grupos activos</a></li>
-        <li><a href="#" class="nav-link text-dark">Asistencia de grupos</a></li>
+        <li class="nav-item">
+          <div class="nav-link main-link has-submenu" (click)="toggleSubmenu('seguridad')"
+            [class.menu-open]="getState('seguridad') === 'open'">
+            <i class="bi bi-shield-lock-fill me-3"></i>
+            <span>Seguridad</span>
+            <i class="bi bi-chevron-right ms-auto arrow-icon"></i>
+          </div>
+          <ul class="submenu-list flex-column" [@submenuToggle]="getState('seguridad')">
+            <li><a routerLink="/users" routerLinkActive="active-sub" class="nav-link sub-link ">Usuarios</a></li>
+            <li><a routerLink="/roles" routerLinkActive="active-sub" class="nav-link sub-link ">Roles</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <div class="nav-link main-link has-submenu" (click)="toggleSubmenu('operaciones')"
+            [class.menu-open]="getState('operaciones') === 'open'">
+            <i class="bi bi-cash-stack me-3"></i>
+            <span>Operaciones</span>
+            <i class="bi bi-chevron-right ms-auto arrow-icon"></i>
+          </div>
+          <ul class="submenu-list flex-column" [@submenuToggle]="getState('operaciones')">
+            <li><a routerLink="/pagos" routerLinkActive="active-sub" class="nav-link sub-link">Pagos</a></li>
+            <li><a routerLink="/calificaciones" routerLinkActive="active-sub" class="nav-link sub-link ">Notas</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <div class="nav-link main-link has-submenu" (click)="toggleSubmenu('reportes')"
+            [class.menu-open]="getState('reportes') === 'open'">
+            <i class="bi bi-pie-chart-fill me-3"></i>
+            <span>Reportes</span>
+            <i class="bi bi-chevron-right ms-auto arrow-icon"></i>
+          </div>
+          <ul class="submenu-list flex-column" [@submenuToggle]="getState('reportes')">
+            <li><a routerLink="/reportes" routerLinkActive="active-sub" class="nav-link sub-link ">Listado</a></li>
+            <li><a routerLink="/cierre" routerLinkActive="active-sub" class="nav-link sub-link ">Cierre Mensual</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/configuracion" routerLinkActive="active" class="nav-link main-link settings-link">
+            <i class="bi bi-gear-fill me-3"></i>
+            <span>Configuración</span>
+          </a>
+        </li>
+
       </ul>
+    </nav>
+  </div>
 
 
-    </li>
-
-
-    <!-- registros-->
-    <li>
-      <a (click)="toggleSubmenu('registros')" class="nav-link text-dark" role="button">
-        <i class="bi bi-wrench me-2"></i> Registros
-      </a>
-      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('registros')">
-        <li><a routerLink="/alumnos" class="nav-link text-dark">Registro de alumnos</a></li>
-        <li><a routerLink="/encargado" class="nav-link text-dark">Registro de encargados</a></li>
-
-      </ul>
-    </li>
-
-    <!-- Seguridad -->
-    <li>
-      <a (click)="toggleSubmenu('seguridad')" class="nav-link text-dark" role="button">
-        <i class="bi bi-shield-lock me-2"></i> Seguridad
-      </a>
-      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('seguridad')">
-        <li><a routerLink="/users" class="nav-link text-dark">Registro de usuarios</a></li>
-        <li><a routerLink="/roles" class="nav-link text-dark">Registro de roles</a></li>
-      </ul>
-    </li>
-
-    <!-- Operaciones -->
-    <li>
-      <a (click)="toggleSubmenu('operaciones')" class="nav-link text-dark" role="button">
-        <i class="bi bi-cash-coin me-2"></i> Operaciones
-      </a>
-      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('operaciones')">
-        <li><a routerLink="/pagos" class="nav-link text-dark">Registro de pagos</a></li>
-        <li><a routerLink="/calificaciones" class="nav-link text-dark">Registro de notas</a></li>
-      </ul>
-    </li>
-
-    <!-- Reportes -->
-    <li>
-      <a (click)="toggleSubmenu('reportes')" class="nav-link text-dark" role="button">
-        <i class="bi bi-bar-chart me-2"></i> Reportes
-      </a>
-      <ul class="nav flex-column ms-3" [@submenuToggle]="getState('reportes')">
-        <li><a routerLink="/reportes" class="nav-link text-dark">Listado de reportes</a></li>
-        <li><a routerLink="/cierre" class="nav-link text-dark">Cierre mensual</a></li>
-      </ul>
-    </li>
-
-    <li class="nav-item">
-      <a routerLink="/configuracion" class="nav-link text-dark">
-        <i class="bi bi-speedometer2 me-2"></i> Configuracion
-      </a>
-    </li>
-
-
-
-  </ul>
 </div>

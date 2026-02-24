@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PagoDTO, PagoResponseDTO } from '../../models/pago.model';
@@ -44,4 +44,16 @@ export class PagoService {
   obtenerInfoBanner(id: number): Observable<any> {
     return this.http.get(`${this.BASE_URL}/alumno-grupo/${id}/detalle-banner`);
   }
+
+
+  anularPago(id: number, motivo: string): Observable<void> {
+    // Usamos HttpParams para que Angular se encargue de codificar espacios o caracteres especiales
+    const params = new HttpParams().set('motivo', motivo);
+
+
+    // El segundo parámetro es el body, enviamos {} porque el backend no espera un body
+    return this.http.put<void>(`${this.PAGO_API}/anular/${id}`, {}, { params });
+  }
+
+
 }

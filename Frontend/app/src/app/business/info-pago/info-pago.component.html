@@ -1,148 +1,222 @@
-<div class="container-fluid p-0">
-    <div class="card-header bg-white py-1 d-flex justify-content-between align-items-center">
-        <h2 class="mb-0 text-primary fw-bold"><i class="bi bi-pencil-square me-2"></i>Registro de pagos</h2>
-        <button class="btn btn-outline-secondary btn-sm" (click)="regresar()">
-            <i class="bi bi-arrow-left"></i> Volver
+<div class="container-fluid min-vh-100 p-0">
+
+    <div class="mb-3">
+        <button class="btn btn-link custom-back" (click)="regresar()">
+            <i class="bi bi-arrow-left pe-1"></i>Volver al listado
         </button>
     </div>
 
-    <div *ngIf="alumnoInfo; else cargando">
-        <div class="card bg-primary text-white shadow-sm mb-4">
-            <div class="card-body p-2">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h3 class="fw-bold mb-0">{{ alumnoInfo.nombreCompleto }}</h3>
-                        <p class="mb-0 opacity-75 fs-5">Código Personal: <strong>{{ alumnoInfo.codigoPersonal
-                                }}</strong></p>
+    <div *ngIf="alumnoInfo" class="card border-0 shadow-sm mb-1">
+        <div class="card-body p-0">
+            <div class="p-3 bg-primary text-white rounded-top">
+                <div class="row align-items-center g-3">
+                    <div class="col-12 col-md-auto text-center text-md-start">
+                        <div class="bg-white text-primary rounded-circle d-inline-flex align-items-center justify-content-center fw-bold shadow mx-auto"
+                            style="width: 70px; height: 70px; font-size: 1.8rem;">
+                            {{ alumnoInfo.nombreCompleto.charAt(0) }}
+                        </div>
                     </div>
-                    <div class="col-md-4 text-md-end border-start-md">
-                        <h5 class="mb-0 fw-semibold">{{ alumnoInfo.nombreCurso }}</h5>
-                        <p class="mb-0">Grupo: <span class="badge bg-white text-primary fw-bold">{{
-                                alumnoInfo.codigoGrupo }}</span></p>
+                    <div class="col-12 col-md text-center text-md-start">
+                        <h1 class="display-6 fw-bold mb-0 text-truncate">{{ alumnoInfo.nombreCompleto }}</h1>
+                        <p class="mb-0 opacity-75 small">
+                            <i class="bi bi-key-fill me-1"></i> Codigo Personal: {{ alumnoInfo.codigoPersonal }}
+                        </p>
                     </div>
+                    <div class="col-12 col-md-auto text-center text-md-end d-flex flex-column flex-md-row gap-2 align-items-center justify-content-md-end">
+                        <button
+                            class="btn btn-light btn-lg fw-bold px-4 shadow-sm text-primary w-100 w-md-auto text-nowrap"
+                            data-bs-toggle="modal" data-bs-target="#modalPago"
+                            style="height: 48px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-plus-lg me-2"></i>Registrar Pago
+                        </button>
+
+                        <button class="btn btn-lg fw-bold px-4 shadow-sm w-100 w-md-auto text-nowrap border-0"
+                            (click)="descargarPDF()"
+                            style="background-color: #fee2e2; color: #dc2626; height: 48px; display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-file-earmark-pdf-fill me-2"></i>Exportar historial
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-0 bg-white p-2 rounded-bottom border-top">
+                <div class="col-6 col-md-auto px-3 border-end">
+                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Curso / Grado</small>
+                    <span class="fw-semibold text-dark">{{ alumnoInfo.nombreCurso }}</span>
+                </div>
+                <div class="col-6 col-md-auto px-3">
+                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Grupo</small>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3">
+                        {{ alumnoInfo.codigoGrupo }}
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <ng-template #cargando>
-        <div class="alert alert-info shadow-sm mb-4" *ngIf="loading">
-            <div class="spinner-border spinner-border-sm me-2"></div>
-            Buscando información del alumno...
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-2 border-bottom">
+            <h3 class="h5 mb-0 fw-bold text-secondary">
+                <i class="bi bi-clock-history me-2 text-primary"></i>Historial de Pagos Activos
+            </h3>
         </div>
-    </ng-template>
-
-    <div class="card shadow-sm border-0 mb-4">
-
-
-        <div class="card-body bg-light">
-            <form (ngSubmit)="registrarPago()" #pagoForm="ngForm">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Mes a Pagar</label>
-                        <select class="form-select" [(ngModel)]="nuevoPago.mes" name="mes" required>
-                            <option value="" disabled selected>Seleccione mes...</option>
-                            <option *ngFor="let mes of meses" [value]="mes">{{ mes }}</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Concepto</label>
-                        <select class="form-select" [(ngModel)]="nuevoPago.tipoPago" name="tipoPago" required>
-                            <option value="" disabled selected>Seleccione...</option>
-                            <option value="INSCRIPCION">Inscripción</option>
-                            <option value="COLEGIATURA">Colegiatura</option>
-                            <option value="PAPELERIA">Papelería</option>
-                            <option value="OTRO">Otro</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label fw-bold">Monto (Q)</label>
-                        <input type="number" class="form-control" [(ngModel)]="nuevoPago.monto" name="monto" required
-                            min="1">
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label fw-bold">Mora (Q)</label>
-                        <input type="number" class="form-control" [(ngModel)]="nuevoPago.mora" name="mora">
-                    </div>
-
-                    <div class="col-md-2 d-grid">
-                        <button type="reset" class="btn btn-light  fw-bold">Limpiar</button>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">No. Comprobante / Boleta</label>
-                        <input type="text" class="form-control" [(ngModel)]="nuevoPago.numeroBoleta" name="numeroBoleta"
-                            required placeholder="Ej: 456789">
-                    </div>
-
-                    <div class="col-md-7">
-                        <label class="form-label fw-bold">Observaciones</label>
-                        <input type="text" class="form-control" [(ngModel)]="nuevoPago.observaciones"
-                            name="observaciones" placeholder="Ej: Pago atrasado por beca">
-                    </div>
-
-                    <div class="col-md-2 d-grid">
-                         <button type="submit" class="btn btn-primary btn-sm px-4 fw-bold" [disabled]="!pagoForm.form.valid">
-                            <i class="bi bi-cash me-1"></i> Guardar Pago
-                            </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="alert alert-warning shadow-sm mb-4" *ngIf="!alumnoInfo && !loading">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        No se han encontrado datos previos para la asignación: <strong>{{ alumnoId }}</strong>
-    </div>
-
-    <div class="card shadow-lg border-0 mb-5">
-        <div class="card-header bg-primary text-white p-3">
-            <h5 class="mb-0 fw-bold">Historial Detallado de Pagos</h5>
-            
-        </div>
-
         <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light text-dark">
-                        <tr>
-                            <th class="ps-4">ID</th>
-                            <th>Tipo de Pago</th>
+            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-hover align-middle mb-0 small">
+                    <thead class="table-light sticky-top">
+                        <tr class="small text-uppercase text-muted">
+                            <th class="ps-4 py-2">ID</th>
+                            <th>Concepto</th>
                             <th>Mes</th>
                             <th>Monto</th>
                             <th>Mora</th>
-                            <th>No. Comprobante</th>
-                            <th>Fecha Registro</th>
-                            <th>Observación</th>
+                            <th>Boleta</th>
+                            <th>Fecha de registro</th>
+                             
+                            <th class="pe-4">Observaciones</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let pago of pagos">
-                            <td>#{{ pago.id }}</td>
-                            <td>
-                                <span>{{ pago.tipoPago }}</span>
-                            </td>
+                            <td class="ps-4 text-muted">#{{ pago.id }}</td>
+                            <td><span>{{ pago.tipoPago }}</span></td>
                             <td>{{ pago.mes }}</td>
-                            <td class="fw-bold">Q {{ pago.monto | number:'1.2-2' }}</td>
-                            <td [class.text-danger]="pago.mora > 0">
-                                Q {{ pago.mora | number:'1.2-2' }}
-                            </td>
+                            <td>Q {{ pago.monto | number:'1.2-2' }}</td>
+                            <td [class.text-danger]="pago.mora > 0">Q {{ pago.mora | number:'1.2-2' }}</td>
                             <td>{{ pago.numeroBoleta }}</td>
                             <td>{{ pago.fechaPago | date:'dd/MM/yyyy' }}</td>
-                            <td class="small text-muted">{{ pago.observaciones || '---' }}</td>
+                            
+                            <td>{{ pago.observaciones || '---' }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-outline-danger btn-sm border-0" 
+                                    data-bs-toggle="modal" data-bs-target="#modalAnular"
+                                    (click)="pagoParaAnularId = pago.id"
+                                    title="Anular Pago">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </td>
                         </tr>
-                        <tr *ngIf="pagos.length === 0 && !loading">
-                            <td colspan="8" class="text-center py-5">
-                                <i class="bi bi-folder-x fs-1 d-block text-muted mb-2"></i>
-                                <p class="text-muted">No se encontraron pagos registrados para este alumno.</p>
+
+                        <tr *ngIf="pagos.length === 0">
+                            <td colspan="10" class="text-center py-5 text-muted">
+                                <i class="bi bi-info-circle me-1"></i> No se encontraron pagos activos registrados.
                             </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold" id="modalPagoLabel">
+                    <i class="bi bi-pencil-square me-2"></i>Registrar Pago para Estudiante
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4 bg-light">
+                <form (ngSubmit)="registrarPago()" #pagoForm="ngForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Mes a Pagar</label>
+                            <select class="form-select border-primary-subtle" [(ngModel)]="nuevoPago.mes" name="mes" required>
+                                <option value="" disabled selected>Seleccione mes...</option>
+                                <option *ngFor="let mes of meses" [value]="mes">{{ mes }}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Concepto de Pago</label>
+                            <select class="form-select border-primary-subtle" [(ngModel)]="nuevoPago.tipoPago" name="tipoPago" required>
+                                <option value="" disabled selected>Seleccione...</option>
+                                <option value="INSCRIPCION">Inscripción</option>
+                                <option value="COLEGIATURA">Colegiatura</option>
+                                <option value="PAPELERIA">Papelería</option>
+                                <option value="OTRO">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Monto (Q)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-primary-subtle text-primary fw-bold">Q</span>
+                                <input type="text" class="form-control border-primary-subtle"
+                                    [(ngModel)]="nuevoPago.monto" name="monto" required inputmode="decimal"
+                                    pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Mora (Q)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-primary-subtle text-primary fw-bold">Q</span>
+                                <input type="text" class="form-control border-primary-subtle"
+                                    [(ngModel)]="nuevoPago.mora" name="mora" inputmode="decimal"
+                                    pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold small text-muted text-uppercase">No. de Boleta</label>
+                            <input type="text" class="form-control border-primary-subtle"
+                                [(ngModel)]="nuevoPago.numeroBoleta" name="numeroBoleta" required placeholder="Ej: 1234"
+                                autocomplete="off">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Observaciones</label>
+                            <textarea class="form-control border-primary-subtle" [(ngModel)]="nuevoPago.observaciones"
+                                name="observaciones" rows="2" placeholder="Notas adicionales..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer border-0 px-0 pb-0 mt-4">
+                        <button type="button" class="btn btn-outline-secondary px-4 fw-bold" data-bs-dismiss="modal"
+                            (click)="limpiarFormulario()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm"
+                            [disabled]="!pagoForm.form.valid" data-bs-dismiss="modal">
+                            <i class="bi bi-check-circle me-1"></i> Guardar Pago
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAnular" tabindex="-1" aria-labelledby="modalAnularLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold" id="modalAnularLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Anular Pago #{{pagoParaAnularId}}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-muted small">Para proceder con la anulación de este pago, es obligatorio describir brevemente la razón (ej. error en monto, boleta equivocada, etc.)</p>
+                <div class="mb-3">
+                    <label class="form-label fw-bold small text-muted text-uppercase">Motivo de Anulación</label>
+                    <textarea class="form-control border-danger-subtle" 
+                              [(ngModel)]="motivoAnulacion" 
+                              rows="3" 
+                              placeholder="Escriba el motivo aquí..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-top-0">
+                <button type="button" class="btn btn-link text-secondary fw-bold text-decoration-none" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger px-4 fw-bold shadow-sm" 
+                        (click)="ejecutarAnulacion()" 
+                        [disabled]="!motivoAnulacion || motivoAnulacion.trim().length < 5"
+                        data-bs-dismiss="modal">
+                    Confirmar Anulación
+                </button>
             </div>
         </div>
     </div>

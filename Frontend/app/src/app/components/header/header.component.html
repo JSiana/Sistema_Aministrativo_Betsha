@@ -1,15 +1,38 @@
-  <div class="navbar custom-navbar navbar-expand ">
-    <nav class="container-fluid d-flex align-items-center pt-2 justify-content-between">
-      <div class="d-flex align-items-center gap-1">
-        <button class="btn btn-outline-dark me-2" (click)="emitToggle()">☰</button>
-        <div class="text-dark m-0 p-0">
-          <h6 class="mb-0">ACADEMIA DE COMPUTACION BETSHALOM</h6>
-          <h6 class="mb-0">ADMINISTRACION ESCOLAR</h6>
-        </div>
-      </div>
+<nav class="navbar navbar-expand bg-white border-bottom shadow-sm h-100 py-0">
+  <div class="container-fluid px-3">
 
-      <button class="btn btn-rojo-hover" (click)="cerrarSesion()">
-        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+    <div class="d-flex align-items-center">
+      <button class="btn btn-light border shadow-sm rounded-3 me-3" (click)="emitToggle()">
+        <i class="bi bi-list fs-4"></i>
       </button>
-    </nav>
+
+      <div class="lh-sm">
+        <h1 class="h6 mb-0 fw-bold text-dark" style="letter-spacing: 0.5px;">
+          ACADEMIA BETSHALOM
+        </h1>
+        <small class="text-muted fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">
+          Administración Escolar
+        </small>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <button class="btn btn-link text-secondary position-relative p-2 me-2 shadow-none">
+        <i class="bi bi-bell fs-5"></i>
+        <span
+          class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+          <span class="visually-hidden">Notificaciones</span>
+        </span>
+      </button>
+
+      <div class="vr mx-3 text-secondary opacity-25" style="height: 30px;"></div>
+
+      <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-2"
+        (click)="cerrarSesion()">
+        <span class="d-none d-md-inline">Cerrar Sesión</span>
+        <i class="bi bi-box-arrow-right"></i>
+      </button>
+    </div>
+
   </div>
+</nav>
