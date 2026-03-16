@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserFormComponent } from './user-form/user-form.component';
@@ -40,6 +40,7 @@ import { SpinnerInterceptor } from './interceptors/spinner.interceptor';
 import { SpinnerModule } from './components/spinner/spinner.module';
 import { InfoPagoComponent } from './business/info-pago/info-pago.component';
 import { AsistenciaComponent } from './business/asistencia/asistencia.component';
+import { TareasComponent } from './business/tareas/tareas.component';
 
 
 @NgModule({
@@ -66,12 +67,14 @@ import { AsistenciaComponent } from './business/asistencia/asistencia.component'
     GruposComponent,
     InfoGrupoComponent,
     InfoPagoComponent,
-    AsistenciaComponent
+    AsistenciaComponent,
+    TareasComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    CommonModule,
     HttpClientModule,
     BrowserAnimationsModule,
     NgxPaginationModule,

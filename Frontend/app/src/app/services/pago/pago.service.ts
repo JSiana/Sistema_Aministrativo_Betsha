@@ -10,7 +10,7 @@ export class PagoService {
 
   // URL base general
   private readonly BASE_URL = 'http://localhost:8080/api';
-  
+
   // URL específica para pagos
   private readonly PAGO_API = `${this.BASE_URL}/pagos`;
 
@@ -53,6 +53,11 @@ export class PagoService {
 
     // El segundo parámetro es el body, enviamos {} porque el backend no espera un body
     return this.http.put<void>(`${this.PAGO_API}/anular/${id}`, {}, { params });
+  }
+
+  obtenerSiguienteCorrelativo(): Observable<number> {
+    // Ajusta la URL según tu Controller (ej: /api/pagos/siguiente-correlativo)
+    return this.http.get<number>(`${this.PAGO_API}/siguiente-correlativo`);
   }
 
 

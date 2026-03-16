@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.PagoDTO;
 import com.example.demo.dto.PagoResponseDTO;
 import com.example.demo.model.Pagos;
+import com.example.demo.repository.PagoRepository;
 import com.example.demo.service.PagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class PagoController {
 
     @Autowired
     private PagoService pagoService;
+
+    @Autowired
+    private PagoRepository pagoRepository;
 
 
     @PostMapping
@@ -36,6 +40,11 @@ public class PagoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/siguiente-correlativo")
+    public ResponseEntity<Integer> getSiguienteCorrelativo() {
+        Integer ultimoNumero = pagoRepository.findMaxNumeroBoleta();
+        return ResponseEntity.ok(ultimoNumero + 1);
+    }
 
 
 }

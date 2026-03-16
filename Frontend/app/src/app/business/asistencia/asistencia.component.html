@@ -5,127 +5,169 @@
             <small class="text-secondary fw-light border-start ps-2">Control diario de alumnos</small>
         </div>
     </div>
-    
-    <div class="d-flex gap-2">
-        <div class="input-group input-group-sm shadow-sm">
-            <span class="input-group-text bg-white border-0"><i class="bi bi-calendar-event text-primary"></i></span>
-            <input type="date" class="form-control border-0 bg-white fw-bold" value="2026-02-15">
+
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body py-2 px-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-calendar-event text-primary me-2"></i>
+                    <select class="form-select form-select-sm border-0 bg-light fw-bold" [(ngModel)]="cicloActivo"
+                        (ngModelChange)="cambiarCiclo($event)">
+                        <option value="" disabled selected>Ciclo Escolar</option>
+                        <option *ngFor="let ciclo of ciclos" [value]="ciclo"> {{ ciclo }}</option>
+                    </select>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-people text-primary me-2"></i>
+                    <select class="form-select form-select-sm border-0 bg-light fw-bold" [(ngModel)]="grupoSeleccionado"
+                        (ngModelChange)="cargarAlumnos($event)" [disabled]="grupos.length === 0">
+                        <option [value]="null" disabled>Seleccione Grupo</option>
+                        <option *ngFor="let grupo of grupos" [value]="grupo.id">
+                            {{ grupo.codigo }} - {{ grupo.curso }}
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <input type="date" class="form-control bg-light border-0">
+
+                </div>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+                        <i class="bi bi-check-all me-1"></i> Marcar Presentes
+                    </button>
+                </div>
+            </div>
+
         </div>
-        <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
-            <i class="bi bi-check-all me-1"></i> Marcar Presentes
-        </button>
+
     </div>
+
 </div>
 
+
+
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="bg-light text-uppercase">
+    <div class="table-responsible custom-scroll">
+        <table class="table table-hover align-middle">
+            <thead class="bg-light">
                 <tr>
-                    <th class="ps-4 text-muted small fw-bold" style="width: 50%;">Alumno</th>
-                    <th class="text-center text-muted small fw-bold">Asistencia</th>
-                    <th class="pe-4 text-center text-muted small fw-bold">Observaciones</th>
+                    <th class="ps-4 text-muted small fw-bold text-uppercase">#</th>
+                    <th class="text-muted small fw-bold text-uppercase">Código personal</th>
+                    <th class="text-muted small fw-bold text-uppercase">Nombre Completo</th>
+                    <th class="text-muted small fw-bold text-uppercase">Asistencia</th>
+                    <th class="text-muted small fw-bold text-uppercase">Observaciones</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="ps-4">
-                        <div class="d-flex align-items-center lh-1">
-                            <div class="bg-soft-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                                 style="width: 35px; height: 35px; font-size: 0.85rem; min-width: 35px;">
-                                CL
-                            </div>
-                            <div class="ms-3">
-                                <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.95rem;">Carlos Andrés López</span>
-                                <span class="text-muted" style="font-size: 0.85rem;">Código: 2026-001</span>
-                            </div>
-                        </div>
+            <tbody *ngIf="alumnos.length > 0; else sinAlumnos">
+                <tr
+                    *ngFor="let registro of alumnos | slice:(paginaActual-1)*itemsPorPagina : paginaActual*itemsPorPagina; let i = index">
+
+                    <td class="ps-4 fw-bold text-secondary"> {{ (paginaActual - 1) * itemsPorPagina + i + 1 }}</td>
+                    <td>
+                        <span class="badge bg-blue-light text-primary px-2 py-1">
+                            {{ registro.alumno.codigoPersonal}}
+                        </span>
                     </td>
-                    <td class="text-center">
+                    <td>
+                        {{ registro.alumno.primerApellido}}
+                        {{ registro.alumno.segundoApellido}}
+                        {{ registro.alumno.primerNombre}}
+                        {{ registro.alumno.segundoNombre}}
+                    </td>
+                    <td class="text-center justify-content-center">
                         <div class="btn-group btn-group-sm shadow-sm rounded-pill overflow-hidden" role="group">
-                            <input type="radio" class="btn-check" name="ast1" id="p1" checked>
-                            <label class="btn btn-outline-success border-0 px-3" for="p1" title="Presente">P</label>
-                          
-                            <input type="radio" class="btn-check" name="ast1" id="a1">
-                            <label class="btn btn-outline-danger border-0 px-3" for="a1" title="Ausente">A</label>
-                          
-                            <input type="radio" class="btn-check" name="ast1" id="j1">
-                            <label class="btn btn-outline-warning border-0 px-3" for="j1" title="Justificado">J</label>
+
+                            <input type="radio" class="btn-check" [name]="'asistencia' + registro.alumno.id"
+                                [id]="'p' + registro.alumno.id" checked>
+                            <label class="btn btn-outline-success border-0 px-3"
+                                [for]="'p' + registro.alumno.id">P</label>
+
+                            <input type="radio" class="btn-check" [name]="'asistencia' + registro.alumno.id"
+                                [id]="'a' + registro.alumno.id">
+                            <label class="btn btn-outline-danger border-0 px-3"
+                                [for]="'a' + registro.alumno.id">A</label>
+
+                            <input type="radio" class="btn-check" [name]="'asistencia' + registro.alumno.id"
+                                [id]="'j' + registro.alumno.id">
+                            <label class="btn btn-outline-warning border-0 px-3"
+                                [for]="'j' + registro.alumno.id">J</label>
+
                         </div>
                     </td>
                     <td class="pe-4">
-                        <input type="text" class="form-control form-control-sm border-0 bg-light rounded-pill text-center" 
-                               placeholder="Sin notas" style="font-size: 0.75rem;">
+                        <input type="text"
+                            class="form-control form-control-sm border-0 bg-light rounded-pill text-center"
+                            placeholder="Sin notas" style="font-size: 0.75rem;">
                     </td>
+
                 </tr>
 
-                <tr>
-                    <td class="ps-4">
-                        <div class="d-flex align-items-center lh-1">
-                            <div class="bg-soft-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                                 style="width: 35px; height: 35px; font-size: 0.85rem; min-width: 35px;">
-                                MF
-                            </div>
-                            <div class="ms-3">
-                                <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.95rem;">María Fernanda Gómez</span>
-                                <span class="text-muted" style="font-size: 0.85rem;">Código: 2026-042</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-sm shadow-sm rounded-pill overflow-hidden" role="group">
-                            <input type="radio" class="btn-check" name="ast2" id="p2" checked>
-                            <label class="btn btn-outline-success border-0 px-3" for="p2">P</label>
-                          
-                            <input type="radio" class="btn-check" name="ast2" id="a2">
-                            <label class="btn btn-outline-danger border-0 px-3" for="a2">A</label>
-                          
-                            <input type="radio" class="btn-check" name="ast2" id="j2">
-                            <label class="btn btn-outline-warning border-0 px-3" for="j2">J</label>
-                        </div>
-                    </td>
-                    <td class="pe-4">
-                        <input type="text" class="form-control form-control-sm border-0 bg-light rounded-pill text-center" 
-                               placeholder="Sin notas" style="font-size: 0.75rem;">
-                    </td>
-                </tr>
 
-                <tr>
-                    <td class="ps-4">
-                        <div class="d-flex align-items-center lh-1">
-                            <div class="bg-soft-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                                 style="width: 35px; height: 35px; font-size: 0.85rem; min-width: 35px;">
-                                JA
-                            </div>
-                            <div class="ms-3">
-                                <span class="d-block fw-bold text-dark mb-1" style="font-size: 0.95rem;">José Alejandro Ramírez</span>
-                                <span class="text-muted" style="font-size: 0.85rem;">Código: 2026-089</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <div class="btn-group btn-group-sm shadow-sm rounded-pill overflow-hidden" role="group">
-                            <input type="radio" class="btn-check" name="ast3" id="p3">
-                            <label class="btn btn-outline-success border-0 px-3" for="p3">P</label>
-                          
-                            <input type="radio" class="btn-check" name="ast3" id="a3" checked>
-                            <label class="btn btn-outline-danger border-0 px-3" for="a3">A</label>
-                          
-                            <input type="radio" class="btn-check" name="ast3" id="j3">
-                            <label class="btn btn-outline-warning border-0 px-3" for="j3">J</label>
-                        </div>
-                    </td>
-                    <td class="pe-4 text-center">
-                        <span class="badge bg-danger-soft text-danger fw-light">Cita médica</span>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
-    
-    <div class="card-footer bg-white border-top text-center py-3">
-        <button class="btn btn-success rounded-pill px-5 shadow-sm fw-bold">
-            <i class="bi bi-save2 me-2"></i> Guardar Asistencia
-        </button>
+
+
+</div>
+
+<ng-template #sinAlumnos>
+    <tr>
+        <td colspan="5" class="text-center py-5">
+            <img src="assets/img/empty-state.svg" alt="" style="width: 80px; opacity: 0.5" class="mb-3 d-block mx-auto">
+            <p class="text-muted mb-0">No se encontraron alumnos para este grupo.</p>
+        </td>
+    </tr>
+</ng-template>
+
+
+<div class="card-footer bg-white border-top py-3 border-0 rounded-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+
+        <div class="text-muted small ps-2">
+            Mostrando <b>{{ (paginaActual - 1) * itemsPorPagina + 1 }}</b> a
+            <b>{{ Math.min(paginaActual * itemsPorPagina, alumnos.length) }}</b> de
+            <b>{{ alumnos.length }}</b> alumnos
+        </div>
+
+        <nav aria-label="Navegación de tabla">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item" [class.disabled]="paginaActual === 1">
+                    <button class="page-link border-0 rounded-circle me-1" (click)="paginaActual = paginaActual - 1">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                </li>
+                <li class="page-item" *ngFor="let p of totalPaginas">
+                    <button class="page-link border-0 rounded-3 mx-1" [class.bg-primary]="paginaActual === p"
+                        [class.text-white]="paginaActual === p" (click)="paginaActual = p">
+                        {{ p }}
+                    </button>
+                </li>
+
+                <li class="page-item" [class.disabled]="paginaActual * itemsPorPagina >= alumnos.length">
+                    <button class="page-link border-0 rounded-circle ms-1" (click)="paginaActual = paginaActual + 1">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="d-flex align-items-center pe-2">
+            <span class="text-muted small me-2">Filas:</span>
+            <select class="form-select form-select-sm border-light bg-light fw-bold" style="width: 70px;"
+                [(ngModel)]="itemsPorPagina">
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+
+            </select>
+        </div>
     </div>
+
+
+</div>
+<div class="card-footer border-top text-center py-3">
+    <button class="btn btn-success rounded-pill px-5 shadow-sm fw-bold">
+        <i class="bi bi-save2 me-2"></i> Guardar Asistencia
+    </button>
 </div>

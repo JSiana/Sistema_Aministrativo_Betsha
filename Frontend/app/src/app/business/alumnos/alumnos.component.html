@@ -7,6 +7,10 @@
     <small class="text-secondary fw-light ps-1">Gestión de expedientes y registros escolares</small>
   </div>
 
+  <button class="btn btn-outline-danger rounded-pill px-4 shadow-sm me-2 align-items-end" (click)="descargarPDF()">
+    <i class="bi bi-file-earmark-pdf-fill me-2"></i> Reporte PDF
+  </button>
+
   <button class="btn btn-primary rounded-pill px-4 shadow-sm" (click)="abrirModalNuevo()">
     <i class="bi bi-person-plus-fill me-2"></i> Nuevo Alumno
   </button>
@@ -21,7 +25,7 @@
           <th class="text-muted small fw-bold text-uppercase">Código</th>
           <th class="text-muted small fw-bold text-uppercase">Nombre Completo</th>
           <th class="text-muted small fw-bold text-uppercase text-center">Estado</th>
-          <th class="pe-4 text-end text-muted small fw-bold text-uppercase">Acciones</th>
+          <th class="pe-4 text-end text-muted small fw-bold text-uppercase">Acciones</th>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
         </tr>
       </thead>
       <tbody *ngIf="alumnos.length > 0; else sinAlumnos">

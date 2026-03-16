@@ -122,101 +122,155 @@ export class InfoGrupoComponent {
 
   cargarAlumnosAsignados(): void {
     this.alumnoGrupoService.listarAlumnosDelGrupo(this.idGrupo).subscribe({
-      next: (data) => {
-        this.alumnosAsignados = data;
-        if (this.grupo) this.grupo.cantidadAlumnos = this.alumnosAsignados.length;
-      }
+      next: (data: any[]) => {
+        this.alumnosAsignados = data.sort((a, b) => {
+          // Concatenamos: Primer Apellido + Segundo Apellido + Primer Nombre
+          // Esto asegura que "Xitumul Ixpatá" vaya antes que "Xitumul Morales" 
+          // porque la 'I' de Ixpatá va antes que la 'M' de Morales.
+          const fullA = `
+          ${a.alumno?.primerApellido || ''} 
+          ${a.alumno?.segundoApellido || ''} 
+          ${a.alumno?.primerNombre || ''}
+        `.toLowerCase().trim();
+
+          const fullB = `
+          ${b.alumno?.primerApellido || ''} 
+          ${b.alumno?.segundoApellido || ''} 
+          ${b.alumno?.primerNombre || ''}
+        `.toLowerCase().trim();
+
+          return fullA.localeCompare(fullB);
+        });
+
+        if (this.grupo) {
+          this.grupo.cantidadAlumnos = this.alumnosAsignados.length;
+        }
+      },
+      error: (err) => console.error('Error al cargar alumnos', err)
     });
   }
 
 
-  descargarPDF() {
-    if (!this.grupo) return;
+  async descargarPDF() {
+  if (!this.grupo) return;
 
-    const doc = new jsPDF('p', 'pt', 'a4');
+  const doc = new jsPDF('p', 'pt', 'a4');
+  const fechaDoc = new Date().toLocaleDateString();
 
-    // Colores institucionales (Azul y Gris)
-    const azulOscuro: [number, number, number] = [26, 37, 47];
-    const grisClaro: [number, number, number] = [245, 245, 245];
+  // Colores institucionales actualizados (#007c92)
+  const azulInstitucional: [number, number, number] = [0, 124, 146];
+  const grisClaro: [number, number, number] = [245, 245, 245];
 
-    // 1. Encabezado Institucional (Academia Betshalom)
-    doc.setFillColor(azulOscuro[0], azulOscuro[1], azulOscuro[2]);
+  // Función para cargar la imagen (Promesa)
+  const cargarImagen = (url: string): Promise<HTMLImageElement> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = (err) => reject(err);
+      img.src = url;
+    });
+  };
+
+  try {
+    // 1. Encabezado Institucional (Fondo azul)
+    doc.setFillColor(...azulInstitucional);
     doc.rect(0, 0, 600, 100, 'F');
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
-    doc.text('REPORTE ACADÉMICO DE GRUPO', 40, 55);
+    // Cargar y dibujar logo
+    const logo = await cargarImagen('/LOGO.png');
+    doc.addImage(logo, 'PNG', 480, 20, 60, 60);
 
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('ACADEMIA BETSHALOM - REGISTRO DE CALIFICACIONES', 40, 75);
-
-    // 2. Información del Grupo (Arriba de la tabla)
-    doc.setTextColor(40, 40, 40);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('DATOS DEL CURSO', 40, 135);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.text(`Curso: ${this.grupo.curso}`, 40, 155);
-    doc.text(`Código: ${this.grupo.codigo}`, 40, 170);
-    doc.text(`Jornada: ${this.grupo.jornada}`, 40, 185);
-    doc.text(`Día y Horario: ${this.grupo.dia} - ${this.grupo.horario}`, 40, 200);
-
-    // 3. Resumen de cantidad de alumnos
-    doc.setFillColor(grisClaro[0], grisClaro[1], grisClaro[2]);
-    doc.roundedRect(380, 125, 170, 70, 5, 5, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.text('ALUMNOS INSCRITOS', 400, 150);
-    doc.setFontSize(18);
-    doc.setTextColor(azulOscuro[0], azulOscuro[1], azulOscuro[2]);
-    doc.text(`${this.alumnosAsignados.length}`, 400, 175);
-
-    // 4. Tabla de Alumnos y Notas
-    // Usamos 'alumnosAsignados' para llenar la tabla
-    const cuerpoTabla = this.alumnosAsignados.map((asig: any, index: number) => [
-      index + 1,
-      asig.alumno?.codigoPersonal || '---',
-      `${asig.alumno?.primerNombre || ''} ${asig.alumno?.segundoNombre || ''} ${asig.alumno?.primerApellido || ''} ${asig.alumno?.segundoApellido || ''}`,
-      '---', // Espacio para Notas (según tu HTML actual)
-      '---'  // Espacio para Promedio (según tu HTML actual)
-    ]);
-
-    autoTable(doc, {
-      startY: 230,
-      head: [['#', 'CÓDIGO', 'NOMBRE COMPLETO', 'NOTAS', 'PROMEDIO']],
-      body: cuerpoTabla,
-      headStyles: {
-        fillColor: azulOscuro,
-        textColor: [255, 255, 255],
-        fontSize: 10,
-        halign: 'center'
-      },
-      styles: {
-        fontSize: 9,
-        cellPadding: 8
-      },
-      columnStyles: {
-        0: { halign: 'center', cellWidth: 30 },
-        1: { cellWidth: 80 },
-        3: { halign: 'center', cellWidth: 80 },
-        4: { halign: 'center', cellWidth: 80 }
-      }
-    });
-
-    // 5. Pie de página
-    const finalY = (doc as any).lastAutoTable.finalY + 60;
-    doc.setFontSize(8);
-    doc.setTextColor(150);
-    doc.text(
-      `Documento generado el: ${new Date().toLocaleDateString()}`,
-      40,
-      doc.internal.pageSize.height - 30
-    );
-
-    // 6. Descargar el archivo con nombre del grupo
-    doc.save(`Reporte_Grupo_${this.grupo.codigo}.pdf`);
+  } catch (error) {
+    console.warn("Logo no encontrado en /LOGO.png, generando sin imagen");
+    doc.setFillColor(...azulInstitucional);
+    doc.rect(0, 0, 600, 100, 'F');
   }
+
+  // Títulos del Encabezado (Texto Blanco)
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.text('REPORTE ACADÉMICO DE GRUPO', 40, 55);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('ACADEMIA BETSHALOM - REGISTRO DE CALIFICACIONES', 40, 75);
+
+  // 2. Información del Grupo (Lado izquierdo)
+  doc.setTextColor(40, 40, 40);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('DATOS DEL CURSO', 40, 135);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text(`Curso: ${this.grupo.curso}`, 40, 155);
+  doc.text(`Código: ${this.grupo.codigo}`, 40, 170);
+  doc.text(`Jornada: ${this.grupo.jornada}`, 40, 185);
+  doc.text(`Día y Horario: ${this.grupo.dia} - ${this.grupo.horario}`, 40, 200);
+
+  // 3. Resumen de cantidad de alumnos (Cuadro gris a la derecha)
+  doc.setFillColor(grisClaro[0], grisClaro[1], grisClaro[2]);
+  doc.roundedRect(380, 125, 170, 75, 8, 8, 'F');
+  
+  doc.setTextColor(azulInstitucional[0], azulInstitucional[1], azulInstitucional[2]);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text('ALUMNOS INSCRITOS', 400, 150);
+  
+  doc.setFontSize(20);
+  doc.text(`${this.alumnosAsignados.length}`, 400, 178);
+
+  // 4. Tabla de Alumnos y Notas
+  const cuerpoTabla = this.alumnosAsignados.map((asig: any, index: number) => [
+    index + 1,
+    asig.alumno?.codigoPersonal || '---',
+    `${asig.alumno?.primerApellido || ''} ${asig.alumno?.segundoApellido || ''} ${asig.alumno?.primerNombre || ''} ${asig.alumno?.segundoNombre || ''}`,
+    '---', // Espacio para Notas
+    '---'  // Espacio para Promedio
+  ]);
+
+  autoTable(doc, {
+    startY: 230,
+    head: [['#', 'CÓDIGO', 'NOMBRE COMPLETO DEL ALUMNO', 'NOTAS', 'PROMEDIO']],
+    body: cuerpoTabla,
+    headStyles: {
+      fillColor: azulInstitucional,
+      textColor: [255, 255, 255],
+      fontSize: 10,
+      halign: 'center',
+      valign: 'middle'
+    },
+    styles: {
+      fontSize: 9,
+      cellPadding: 6
+    },
+    columnStyles: {
+      0: { halign: 'center', cellWidth: 30 },
+      1: { halign: 'center', cellWidth: 80 },
+      2: { halign: 'left' },
+      3: { halign: 'center', cellWidth: 70 },
+      4: { halign: 'center', cellWidth: 70 }
+    }
+  });
+
+  // 5. Pie de página
+  const pageHeight = doc.internal.pageSize.height;
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text(
+    `Documento generado automáticamente por Sistema Academia Betshalom | Fecha: ${fechaDoc}`,
+    40,
+    pageHeight - 30
+  );
+  doc.text(
+    `Página 1`,
+    540,
+    pageHeight - 30
+  );
+
+  // 6. Descargar el archivo
+  const nombreArchivo = this.grupo.codigo.replace(/\s+/g, '_');
+  doc.save(`Reporte_Grupo_${nombreArchivo}.pdf`);
+}
 }

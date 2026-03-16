@@ -67,24 +67,33 @@ export class PagosComponent {
   }
 
   cargarAlumnos(grupoId: number) {
-  // 1. Reiniciamos la página a 1 cada vez que cambiamos de grupo
-  this.paginaActual = 1;
+    // 1. Reiniciamos la página a 1 cada vez que cambiamos de grupo
+    this.paginaActual = 1;
 
-  if (!grupoId) {
-    this.alumnos = []; 
-    return;
-  }
-
-  this.alumnoGrupoService.listarAlumnosDelGrupo(grupoId).subscribe({
-    next: (data) => {
-      this.alumnos = data;
-      this.paginaActual = 1;
-    },
-    error: () => {
+    if (!grupoId) {
       this.alumnos = [];
+      return;
     }
-  });
-}
+
+    this.alumnoGrupoService.listarAlumnosDelGrupo(grupoId).subscribe({
+      next: (data: any[]) => {
+        // Aplicamos el ordenamiento antes de asignar la data
+        this.alumnos = data.sort((a, b) => {
+          // Concatenamos los campos para una comparación completa
+          const fullA = `${a.alumno?.primerApellido || ''} ${a.alumno?.segundoApellido || ''} ${a.alumno?.primerNombre || ''}`.toLowerCase().trim();
+          const fullB = `${b.alumno?.primerApellido || ''} ${b.alumno?.segundoApellido || ''} ${b.alumno?.primerNombre || ''}`.toLowerCase().trim();
+
+          // localeCompare resuelve el orden alfabético correctamente
+          return fullA.localeCompare(fullB);
+        });
+
+        this.paginaActual = 1;
+      },
+      error: () => {
+        this.alumnos = [];
+      }
+    });
+  }
 
   get totalPaginas(): number[] {
     const cuenta = Math.ceil(this.alumnos.length / this.itemsPorPagina);
