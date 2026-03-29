@@ -13,6 +13,7 @@ export interface PunteoAlumno {
     
     apellidoAlumno: string;
     nota: number;
+    totalAcumulado?: number;
     observacion: string;
     fechaEntregada: string | null;
     descripcionTarea?: string;

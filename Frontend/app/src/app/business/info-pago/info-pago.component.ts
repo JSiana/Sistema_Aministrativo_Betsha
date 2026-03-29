@@ -296,7 +296,7 @@ export class InfoPagoComponent implements OnInit {
 
     doc.setFontSize(18);
     doc.setTextColor(59, 113, 202);
-    doc.text(`GRP-${codGrupo}`, boxX + 70, boxY + 48);
+    doc.text(`${codGrupo}`, boxX + 70, boxY + 48);
 
     doc.setTextColor(100, 100, 100);
     doc.setFontSize(8);

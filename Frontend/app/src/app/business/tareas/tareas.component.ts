@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GrupoResponse } from '../../models/grupo';
 import { GrupoService } from '../../services/grupo/grupo.service';
 import { CursoResponseDTO } from '../../models/curso';
 import { CursoService } from '../../services/curso/curso.service';
 import { CicloService } from '../../services/ciclo/ciclo.service';
 import { AlumnoGrupoService } from '../../services/alumnoGrupo/alumno-grupo.service';
-import { PunteoAlumno, Tarea } from '../../models/tarea.model';
+import { PunteoAlumno, PunteoUpdateRequest, Tarea } from '../../models/tarea.model';
 import { TareaService } from '../../services/tarea/tarea.service';
 import { TimeScale } from 'chart.js';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tareas',
@@ -15,7 +16,7 @@ import { TimeScale } from 'chart.js';
   templateUrl: './tareas.component.html',
   styleUrl: './tareas.component.scss'
 })
-export class TareasComponent {
+export class TareasComponent implements OnInit{
 
   cicloActivo!: string;
   ciclos: string[] = [];
@@ -40,6 +41,8 @@ export class TareasComponent {
     idGrupo: 0
   };
 
+  totalPuntosBimestre: number = 0;
+
   constructor(
     private grupoService: GrupoService,
     private cicloService: CicloService,
@@ -55,6 +58,8 @@ export class TareasComponent {
     }
     this.cargarGrupos();
   }
+
+  
 
   // --- LÓGICA DE FILTROS ---
 
@@ -103,17 +108,41 @@ export class TareasComponent {
     });
   }
 
-  guardarNotaIndividual(punteo: PunteoAlumno) {
-    this.tareaService.actualizarNotasMasivo([punteo]).subscribe({
-      next: () => alert('Nota guardada correctamente'),
-      error: (err) => console.error('Error al guardar nota', err)
-    });
-  }
+ guardarNotaIndividual(punteo: PunteoAlumno) {
+  // Creamos el objeto de actualización basado exactamente en lo que Java espera
+  const updateRequest: PunteoUpdateRequest = {
+    idTareaAlumno: punteo.idTareaAlumno, // <--- Asegúrate que este no sea undefined
+    nota: punteo.nota,
+    observacion: punteo.observacion || '',
+    fechaEntregada: punteo.fechaEntregada
+  };
 
+  console.log('Enviando a Java:', updateRequest); // Revisa esto en la consola del navegador (F12)
+
+  this.tareaService.actualizarNotasMasivo([updateRequest]).subscribe({
+    next: () => {
+      alert('Nota guardada correctamente');
+      // Opcional: podrías refrescar la lista aquí
+    },
+    error: (err) => {
+      console.error('Error al guardar nota', err);
+      alert('Error al guardar la nota. Revisa la consola.');
+    }
+  });
+}
   // --- GESTIÓN DE TAREAS (Pestaña 1) ---
 
   guardarTarea() {
     if (this.grupoSeleccionado) {
+
+      if (this.totalPuntosAsignados + Number(this.nuevaTarea.punteo) > 100){
+        Swal.fire({
+          title: 'Limite excedido',
+          text: `No puedes asignar más de 100 puntos. Espacio disponible: ${100 - this.totalPuntosAsignados} pts.`,
+          icon: 'error'
+        });
+        return;
+      }
 
       // El objeto debe tener los mismos nombres de campos que tu TareaDTO en Java
       const tareaParaEnviar = {
@@ -131,7 +160,11 @@ export class TareasComponent {
           console.log('Respuesta del servidor:', res);
           this.tareas.push(res);
           this.limpiarFormulario();
-          alert('¡Tarea guardada con éxito!');
+          Swal.fire({
+            title: 'Tarea guardada',
+            text: 'La tarea ha sido creada correctamente',
+            icon: 'success'
+          })
         },
         error: (err) => {
           console.error('Error al guardar:', err);
@@ -162,5 +195,50 @@ export class TareasComponent {
     const cuenta = Math.ceil(this.alumnosNotas.length / this.itemsPorPagina);
     return Array.from({ length: cuenta || 1 }, (_, i) => i + 1);
   }
+
+  get totalPuntosAsignados(): number {
+    return this.tareas.reduce((acc, tarea) => acc + (Number(tarea.punteo)||0),0);
+  }
+
+
+  // Alias para usar en la tabla de alumnos (es lo mismo que totalPuntosAsignados, 
+// pero ayuda a que el HTML sea más fácil de leer)
+get punteoMaximoBimestre(): number {
+  return this.totalPuntosAsignados;
+}
+
+// Devuelve cuánto vale específicamente la tarea que se está calificando ahora
+get punteoTareaSeleccionada(): number {
+  const tarea = this.tareas.find(t => t.id == this.tareaSeleccionadaId);
+  return tarea ? (Number(tarea.punteo) || 0) : 0;
+}
+
+  async eliminarTarea(id: number): Promise<void>{
+    if (!id) return;
+    const result = await Swal.fire({
+      title: '¿Estas seguro?',
+      text: 'Estas por eliminar una tarea para este grupo',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    });
+
+    if (result.isConfirmed){
+      this.tareaService.eliminar(id).subscribe({
+        next: () => {
+          this.cargarTareas();
+          Swal.fire({
+            icon: 'success',
+            text: 'Tarea eliminada'
+          })
+        },
+        error: (err) => console.error('Error al eliminar', err)
+      });
+    }
+  }
+
+
 
 }

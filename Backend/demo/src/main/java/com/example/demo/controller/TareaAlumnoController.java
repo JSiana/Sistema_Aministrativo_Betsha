@@ -25,8 +25,13 @@ public class TareaAlumnoController {
 
     // Recibe una lista de alumnos para guardar todos los cambios de una vez
     @PutMapping("/actualizar-masivo")
-    public ResponseEntity<String> actualizarNotas(@RequestBody List<PunteoUpdateRequestDTO> dtos) {
-        tareaAlumnoService.actualizarNotasMasivamente(dtos);
-        return ResponseEntity.ok("Notas actualizadas correctamente");
+// Cambiamos PunteoUpdateRequestDTO por PunteoResponseDTO
+    public ResponseEntity<String> actualizarNotas(@RequestBody List<PunteoResponseDTO> dtos) {
+        try {
+            tareaAlumnoService.actualizarNotasMasivamente(dtos);
+            return ResponseEntity.ok("Notas actualizadas correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al actualizar: " + e.getMessage());
+        }
     }
 }

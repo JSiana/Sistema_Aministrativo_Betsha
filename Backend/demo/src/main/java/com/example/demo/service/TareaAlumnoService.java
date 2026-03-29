@@ -8,5 +8,5 @@ import java.util.List;
 public interface TareaAlumnoService {
     List<PunteoResponseDTO> listarNotasPorTarea (Long idTareas);
 
-    void actualizarNotasMasivamente(List<PunteoUpdateRequestDTO> dtos);
+    void actualizarNotasMasivamente(List<PunteoResponseDTO> notasDtos);
 }

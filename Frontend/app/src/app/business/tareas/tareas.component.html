@@ -19,12 +19,13 @@
                     <select class="form-select form-select-sm border-0 bg-light fw-bold" [(ngModel)]="grupoSeleccionado"
                         (ngModelChange)="onFiltroChange()" [disabled]="grupos.length === 0">
                         <option [value]="null" disabled>Seleccione Grupo</option>
-                        <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.codigo }} - {{ grupo.curso }}</option>
+                        <option *ngFor="let grupo of grupos" [value]="grupo.id">{{ grupo.codigo }} - {{ grupo.curso }}
+                        </option>
                     </select>
                 </div>
                 <div class="d-flex align-items-center border-start ps-3">
                     <i class="bi bi-bookmark-star text-primary me-2"></i>
-                    <select class="form-select form-select-sm border-0 bg-light fw-bold text-primary" 
+                    <select class="form-select form-select-sm border-0 bg-light fw-bold text-primary"
                         [(ngModel)]="bimestreSeleccionado" (ngModelChange)="onFiltroChange()">
                         <option [value]="1">1er Bimestre</option>
                         <option [value]="2">2do Bimestre</option>
@@ -58,7 +59,12 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="fw-bold mb-0">
-                        <i class="bi bi-card-list text-primary me-2"></i>Actividades del Bimestre {{bimestreSeleccionado}}
+                        <i class="bi bi-card-list text-primary me-2"></i>Actividades del Bimestre
+                        {{bimestreSeleccionado}}
+                        <span class="m-3 badge"
+                            [ngClass]="{'bg-success': totalPuntosAsignados === 100, 'bg-warning text-dark': totalPuntosAsignados < 100, 'bg-danger': totalPuntosAsignados > 100}">
+                            Total: {{ totalPuntosAsignados }} / 100
+                        </span>
                     </h5>
                     <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm" [disabled]="!grupoSeleccionado"
                         data-bs-toggle="modal" data-bs-target="#modalTarea">
@@ -70,27 +76,31 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
+                                <th class="text-center">#</th>
                                 <th>Descripción</th>
-                                <th class="text-center">Punteo</th> 
+                                <th class="text-center">Punteo</th>
                                 <th class="text-center">Bimestre</th>
                                 <th>Fecha Entrega</th>
                                 <th class="text-end">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let tarea of tareas">
+                            <tr *ngFor="let tarea of tareas; let i = index">
+                                <td class="text-secondary text-center"> {{ i + 1 }}</td>
                                 <td class="fw-medium">{{ tarea.descripcion }}</td>
                                 <td class="text-center">
                                     {{ tarea.punteo}}
                                 </td>
                                 <td class="text-center">
-                                    <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3">
+                                    <span
+                                        class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3">
                                         {{ tarea.bimestre }}
                                     </span>
                                 </td>
                                 <td class="text-secondary">{{ tarea.fechaEntrega | date:'dd/MM/yyyy' }}</td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-light text-danger border-0">
+                                    <button class="btn btn-sm btn-light text-danger border-0"
+                                        (click)="eliminarTarea(tarea.id!)">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -114,13 +124,13 @@
                     <i class="bi bi-filter-right text-secondary"></i>
                     <label class="fw-bold small text-secondary me-2">Seleccionar Tarea:</label>
                     <i class="bi bi-file-earmark-text"></i>
-                    <select class="form-select form-select-sm border-0 bg-light w-auto " 
-                            [(ngModel)]="tareaSeleccionadaId" (ngModelChange)="cargarNotasDeTarea($event)">
+                    <select class="form-select form-select-sm border-0 bg-light w-auto "
+                        [(ngModel)]="tareaSeleccionadaId" (ngModelChange)="cargarNotasDeTarea($event)">
                         <option [value]="null" disabled>-- Seleccione una actividad --</option>
                         <option *ngFor="let t of tareas" [value]="t.id">{{ t.descripcion }}</option>
                     </select>
-                    
-                    
+
+
                 </div>
             </div>
             <div class="card-body p-0">
@@ -131,7 +141,9 @@
                                 <th class="ps-4">No.</th>
                                 <th>Alumno</th>
                                 <th>Punteo</th>
+                                <th>Total de calificación</th>
                                 <th>Observación</th>
+
                                 <th class="text-end pe-4">Acciones</th>
                             </tr>
                         </thead>
@@ -139,42 +151,64 @@
                             <tr *ngFor="let item of alumnosPaginados; let i = index">
                                 <td class="ps-4 text-secondary">{{ ((paginaActual - 1) * itemsPorPagina) + i + 1 }}</td>
                                 <td>
-                                    <div class="text-dark">{{ item.nombreAlumno }} 
-                                      
+                                    <div class="text-dark">{{ item.nombreAlumno }}
+
                                         {{ item.apellidoAlumno }}</div>
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control form-control-sm w-75" [(ngModel)]="item.nota" placeholder="0.00">
+                                    <input type="text" class="form-control form-control-sm w-75" [(ngModel)]="item.nota"
+                                        placeholder="0.00">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.observacion" placeholder="...">
+                                    <div class="d-flex align-items-center">
+                                        <span class="fw-bold text-primary me-2">
+                                            {{ item.totalAcumulado || 0 }} / {{ punteoMaximoBimestre }}
+                                        </span>
+
+                                        <div class="progress w-50" style="height: 6px;">
+                                            <div class="progress-bar"
+                                                [style.width.%]="(item.totalAcumulado / 100) * 100"
+                                                [ngClass]="item.totalAcumulado < 60 ? 'bg-danger' : 'bg-success'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm"
+                                        [(ngModel)]="item.observacion" placeholder="...">
                                 </td>
                                 <td class="text-end pe-4">
-                                    <button class="btn btn-sm btn-outline-primary rounded-pill" (click)="guardarNotaIndividual(item)">
-                                        <i class="bi bi-save"></i>
+                                    <button class="btn btn-sm btn-outline-primary rounded-pill"
+                                        (click)="guardarNotaIndividual(item)">
+                                        <i class="bi bi-save"></i> Guardar nota
                                     </button>
                                 </td>
                             </tr>
                             <tr *ngIf="alumnosNotas.length === 0">
                                 <td colspan="5" class="text-center py-4 text-muted">
-                                    {{ !tareaSeleccionadaId ? 'Seleccione una tarea para ver el listado' : 'No hay registros de notas' }}
+                                    {{ !tareaSeleccionadaId ? 'Seleccione una tarea para ver el listado' : 'No hay
+                                    registros de notas' }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-between align-items-center p-3 border-top" *ngIf="alumnosNotas.length > 0">
-                    <small class="text-secondary">Mostrando {{ alumnosPaginados.length }} de {{ alumnosNotas.length }} alumnos</small>
+                <div class="d-flex justify-content-between align-items-center p-3 border-top"
+                    *ngIf="alumnosNotas.length > 0">
+                    <small class="text-secondary">Mostrando {{ alumnosPaginados.length }} de {{ alumnosNotas.length }}
+                        alumnos</small>
                     <nav>
                         <ul class="pagination pagination-sm mb-0">
                             <li class="page-item" [class.disabled]="paginaActual === 1">
-                                <a class="page-link" (click)="paginaActual = paginaActual - 1" style="cursor: pointer;">Anterior</a>
+                                <a class="page-link" (click)="paginaActual = paginaActual - 1"
+                                    style="cursor: pointer;">Anterior</a>
                             </li>
                             <li class="page-item" *ngFor="let p of totalPaginas" [class.active]="p === paginaActual">
                                 <a class="page-link" (click)="paginaActual = p" style="cursor: pointer;">{{ p }}</a>
                             </li>
                             <li class="page-item" [class.disabled]="paginaActual === totalPaginas.length">
-                                <a class="page-link" (click)="paginaActual = paginaActual + 1" style="cursor: pointer;">Siguiente</a>
+                                <a class="page-link" (click)="paginaActual = paginaActual + 1"
+                                    style="cursor: pointer;">Siguiente</a>
                             </li>
                         </ul>
                     </nav>
@@ -198,13 +232,13 @@
                         <input type="text" class="form-control shadow-sm" name="descripcion"
                             [(ngModel)]="nuevaTarea.descripcion" required placeholder="Ej: Ejercicios de Álgebra">
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold small text-secondary">Punteo (Valor)</label>
                             <div class="input-group shadow-sm">
-                                <input type="number" class="form-control" name="punteo"
-                                    [(ngModel)]="nuevaTarea.punteo" required min="1">
+                                <input type="text" class="form-control" name="punteo" [(ngModel)]="nuevaTarea.punteo"
+                                    required min="1">
                                 <span class="input-group-text">pts</span>
                             </div>
                         </div>
